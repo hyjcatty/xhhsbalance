@@ -33,10 +33,10 @@ client.on('connect', function () {
     },60000);
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildversioninfo());
-    },6000);
+    },60000);
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', builddebuginfo());
-    },6000);
+    },60000);
     //client.publish('MQTT_TOPIC_UI_TO_HCU', 'Hello mqtt['+i+']');
 });
 
@@ -55,6 +55,8 @@ client.on('message', function (topic, message) {
 
      }else if(msg.action== "XH_High_Speed_Balance_config_stop"){
          start = false;
+     }else if(msg.action== "XH_High_Speed_Balance_force_flush"){
+         client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
      }
 
 });

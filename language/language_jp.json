@@ -11,7 +11,7 @@
   "head":{
     "icon":"",
     "nologin":"没有登陆",
-    "title":"组合秤",
+    "title":"高速秤",
     "greet":"您好:"
   },
   "foot":{
@@ -49,6 +49,20 @@
     "userconftitle":"其他用户模板",
     "modalconfirm":"确认",
     "modalcancel":"取消"
+  },
+  "userview":{
+    "title":"修改密码",
+    "oldpassword":"当前密码",
+    "newpassword":"新密码",
+    "renewpassword":"再次输入新密码",
+    "confirm":"确定",
+    "titleadmin":"管理工具",
+    "titlenewuser":"新建用户",
+    "newuser":"新用户名",
+    "new":"创建",
+    "userlist":"用户列表",
+    "tippasswordnowsame":"两次密码不相等",
+    "tipusernametoolong":"用户名最大长度为10字符"
   },
   "workview":{
     "alarmbar":{
@@ -128,6 +142,9 @@
     "alert8":"修改配置保存失败",
     "alert9":"系统设置保存失败",
     "alert10":"运行调试命令出错",
+    "message11":"修改成功，请重新登录!",
+    "message12":"重置成功，默认密码为123456!",
+    "message13":"创建成功，默认密码为123456!",
     "message1":"警告：删除失败",
     "message2":"删除成功",
     "message3":"运行成功",

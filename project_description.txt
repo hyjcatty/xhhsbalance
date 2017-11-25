@@ -1,4 +1,4 @@
-The project is a demo project for control the xiaohui balance
+The project is a demo project for control the xiaohui hs balance
 parameters:
 
 

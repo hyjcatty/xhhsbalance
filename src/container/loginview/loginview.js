@@ -58,6 +58,7 @@ export default class unlockview extends Component {
         this.setState({hide:"block"});
         $("#Username_Input").attr("disabled",false);
         $("#Password_Input").attr("disabled",false);
+        $("#Password_Input").val("");
 
     }
     handle_login(){

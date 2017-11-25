@@ -18,6 +18,7 @@ import Exportview from "../container/exportview/exportview"
 import Calibrationview from "../container/calibrationview/calibrationview"
 import Brickview from "../container/brickview/brickview"
 import Workview from "../container/workview/workview"
+import Userview from "../container/userview/userview"
 import './App.css';
 
 import fetch from 'isomorphic-fetch';
@@ -26,6 +27,7 @@ require('es6-promise').polyfill();
 
 var winWidth;
 var winHeight;
+var mqttconf={};
 var basic_address = getRelativeURL()+"/";
 var request_head= basic_address+"request.php";
 class App extends Component{
@@ -46,6 +48,11 @@ class App extends Component{
             savenewback:null,
             savemodback:null,
             forceflashback:null,
+            newusercallback:null,
+            delusercallback:null,
+            resetusercallback:null,
+            listusercallback:null,
+            changepasswordcallback:null,
             language:{
                 "app":{
                     "modalhead":"Warning",
@@ -97,6 +104,12 @@ class App extends Component{
         this._workcontrolfoot=this.footButtonShow.bind(this);
         this._worksavenewcase=this.savenewcase.bind(this);
         this._worksavemodcase=this.savemodcase.bind(this);
+        this._newusercallback=this.newuser.bind(this);
+        this._delusercallback=this.deluser.bind(this);
+        this._resetusercallback=this.resetuser.bind(this);
+        this._listusercallback=this.listuser.bind(this);
+        this._changepasswordcallback=this.changepassword.bind(this);
+        this._headcallbackuser=this.userview.bind(this);
     }
     updateLanguage(language){
         this.setState({language:language});
@@ -108,6 +121,7 @@ class App extends Component{
         this.refs.Brickview.update_language(language.brickview);
         this.refs.Workview.update_language(language.workview);
         this.refs.Calibrationview.update_language(language.calibrationview);
+        this.refs.Userview.update_language(language.userview);
     }
     updateVersion(version){
         this.refs.foot.updateversion(version);
@@ -128,6 +142,7 @@ class App extends Component{
         this.refs.Sysdebugview.update_size(width,canvasheight,headfootheight);
         this.refs.Exportview.update_size(width,canvasheight,headfootheight);
         this.refs.Calibrationview.update_size(width,canvasheight,headfootheight);
+        this.refs.Userview.update_size(width,canvasheight,headfootheight);
     }
     initializesysconf(callback,configure){
         this.refs.Sysconfview.update_callback(callback);
@@ -197,8 +212,30 @@ class App extends Component{
     initializeWork(work2brickcallback,work2alarmremovecallback){
         this.refs.Workview.update_callback(work2brickcallback,work2alarmremovecallback);
     }
+    userview(){
+        this.refs.Calibrationview.hide();
+        this.refs.Workview.hide();
+        this.refs.Loginview.hide();
+        this.refs.foot.hide_all();
+        this.refs.Brickview.hide();
+        this.refs.Sysconfview.hide();
+        this.refs.Sysdebugview.hide();
+        this.refs.Exportview.hide();
+        this.refs.Languageview.hide();
+
+        this.refs.Userview.show();
+        this.footButtonShowAssistant(false,false,false);
+        if(this.state.username === "admin")
+            this.footButtonShow(false,true,true);
+
+        else
+            this.footButtonShow(false,true,false);
+        //console.log(this.state.language);
+        this.tipsinfo("");
+    }
     loginview(){
         this.removeuser();
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.show();
@@ -212,8 +249,10 @@ class App extends Component{
         this.footButtonShow(true,false,false);
         //console.log(this.state.language);
         this.tipsinfo(this.state.language.message.title5);
+        this.refs.head.hide_button();
     }
     brickview(){
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.hide();
@@ -231,6 +270,7 @@ class App extends Component{
 
     }
     languageview(){
+        this.refs.Userview.hide();
         this.refs.Languageview.show();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
@@ -244,6 +284,7 @@ class App extends Component{
         this.tipsinfo("");
     }
     workview_run(configure){
+        this.refs.Userview.hide();
         //this.refs.Workview.billboardview();
         this.refs.Calibrationview.hide();
         this.refs.Loginview.hide();
@@ -263,6 +304,7 @@ class App extends Component{
     }
     workview_running(configure){
         //this.refs.Workview.billboardview();
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Loginview.hide();
         this.refs.Brickview.hide();
@@ -277,6 +319,7 @@ class App extends Component{
     }
     workview_mod(configure){
         //this.refs.Workview.billboardview();
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Loginview.hide();
         this.refs.Brickview.hide();
@@ -293,6 +336,7 @@ class App extends Component{
         if(configure!=null) this.tipsinfo(configure.name);
     }
     sysconfview(){
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.hide();
@@ -310,6 +354,7 @@ class App extends Component{
         this.tipsinfo(this.state.language.message.title4);
     }
     sysdebugview(){
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.hide();
@@ -327,6 +372,7 @@ class App extends Component{
         this.tipsinfo(this.state.language.message.title3);
     }
     exportview(){
+        this.refs.Userview.hide();
         this.refs.Calibrationview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.hide();
@@ -344,6 +390,7 @@ class App extends Component{
         this.tipsinfo(this.state.language.message.title6);
     }
     workview_new(configure){
+        this.refs.Userview.hide();
         //this.refs.Workview.billboardview();
         this.refs.Calibrationview.hide();
         this.refs.Loginview.hide();
@@ -361,6 +408,7 @@ class App extends Component{
         this.tipsinfo(this.state.language.message.title2);
     }
     calibrationview(){
+        this.refs.Userview.hide();
         this.refs.Workview.hide();
         this.refs.Loginview.hide();
         //this.refs.foot.hide_all();
@@ -401,11 +449,13 @@ class App extends Component{
     setuser(username,userid){
         this.setState({userid:userid,username:username});
         this.refs.head.update_username(username);
+        this.refs.Userview.Initialize(username);
 
     }
     seticonlistanddrag(iconlist,drag){
         this.setState({iconlist:iconlist});
         this.refs.Workview.update_configuration(iconlist,drag);
+        this.refs.Userview.update_drag(drag);
     }
     removeuser(){
         this.setState({userid:"user",username:this.state.language.app.userunknown});
@@ -441,11 +491,32 @@ class App extends Component{
     update_clock(clock){
         this.refs.head.update_clock(clock);
     }
+    set_user_list(list){
+        this.refs.Userview.update_user_list(list);
+    }
+    update_user_functions(newuser,deluser,resetuser,listuser,changepassword){
+        this.setState({newusercallback:newuser,delusercallback:deluser,resetusercallback:resetuser,listusercallback:listuser,changepasswordcallback:changepassword});
+    }
+    newuser(username){
+        this.state.newusercallback(username);
+    }
+    deluser(username){
+        this.state.delusercallback(username);
+    }
+    resetuser(username){
+        this.state.resetusercallback(username);
+    }
+    listuser(){
+        this.state.listusercallback();
+    }
+    changepassword(username,oldpassword,newpassword){
+        this.state.changepasswordcallback(username,oldpassword,newpassword);
+    }
     render() {
         return(
         <div>
             <div>
-                <Head ref="head"/>
+                <Head ref="head" headcallbackuser={this._headcallbackuser}/>
             </div>
             <div>
                 <Sysconfview ref="Sysconfview"/>
@@ -456,6 +527,11 @@ class App extends Component{
                 <Loginview ref="Loginview"/>
                 <Brickview ref="Brickview"/>
                 <Workview ref="Workview" workstartcase={this._workstartcase} workstopcase={this._workstopcase} workcontrolfoot={this._workcontrolfoot} worksavenewcase={this._worksavenewcase} worksavemodcase={this._worksavemodcase}/>
+                <Userview ref="Userview" newusercallback={this._newusercallback}
+                          delusercallback={this._delusercallback}
+                          resetusercallback={this._resetusercallback}
+                          listusercallback={this._listusercallback}
+                          changepasswordcallback={this._changepasswordcallback}/>
             </div>
             <div>
                 <Foot ref="foot" footcallbackreturn={this._footcallbackreturn} footcallbackconfigure={this._footcallbackconfigure} footcallbackdebug={this._footcallbackdebug} footcallbackexport={this._footcallbackexport} footcallbackcalibration={this._footcallbackcalibration}
@@ -512,8 +588,10 @@ var clockcycle=setInterval(updateclock,10000);
 //syslanguagefetch();
 syslanguagelistfetch();
 var client;
-initialize_mqtt();
+//initialize_mqtt();
+fetchmqtt();
 function initialize_mqtt(){
+    /*
     client = mqtt.connect('ws://127.0.0.1:3000/mqtt' ,{
         username:"username",
         password:"password",
@@ -523,6 +601,17 @@ function initialize_mqtt(){
 
         console.log('mqtt connect :)');
         client.subscribe('MQTT_XH_High_Speed_Balance_UI');
+    });*/
+    //console.log(mqttconf);
+    client = mqtt.connect(mqttconf.server ,{
+        username:mqttconf.username,
+        password:mqttconf.password,
+        clientId:mqttconf.clientId
+    });
+    client.on('connect', function () {
+
+        console.log('mqtt connect :)');
+        client.subscribe(mqttconf.subscribe);
     });
     client.on("error", function (error) {
         console.log(error.toString());
@@ -531,18 +620,19 @@ function initialize_mqtt(){
     client.on("message", function (topic, payload) {
         //console.log('收到topic = ' + topic + ' 消息: ' + payload.toString());
         let ret = JSON.parse(payload.toString());
-        if(Running===false)return;
+        //if(Running===false)return;
         switch(ret.action)
         {
             case "XH_High_Speed_Balance_statistics_status":
                 app_handle.update_status(ret.data);
+                //console.log("updated");
                 break;
             case "XH_High_Speed_Balance_version_status":
                 app_handle.updateVersion(ret.data);
                 //app_handle.initialize_animateview_chamber(ret.data);
                 break;
             case "XH_High_Speed_Balance_alarm_status":
-                app_handle.showalarm(ret.data);
+                app_handle.showalarm(ret.data.msg);
                 //app_handle.update_animateview_chamber(ret.data);
                 break;
             case "XH_High_Speed_Balance_debug_status":
@@ -568,6 +658,7 @@ function systemstart(){
 
 
 //app_handle.initializefoot(footcallback_return,footcallback_back,footcallback_configure);
+    flushuserlistfetch();
     app_handle.initializefoot(footcallback_save,xhbalancetozeroshortcut,show_expiredModule);
     app_handle.initializehead();
     app_handle.initializeLogin(xhbalancelogin);
@@ -576,11 +667,13 @@ function systemstart(){
     app_handle.initializerunsave(xhbalancesavenewconf,xhbalancesavemodconf);
     app_handle.initializeforceflash(xhbalanceforceflashstatus);
     app_handle.initializeCalibration(balance_to_zero,balance_to_countweight);
+    app_handle.update_user_functions(newuserfetch,deluserfetch,resetuserfetch,flushuserlistfetch,changepasswordfetch);
     app_handle.loginview();
 
     initializedrag("brickview");
     initializedrag("NewConfigureModelContentBody");
     initializedrag("sysconfview");
+    initializedrag("userview");
     updateclock();
     $('#ExpiredConfirm').on('click',delete_configure);
 }
@@ -599,7 +692,7 @@ var footcallback_back= function(){
 
 function updateclock(){
     var date = new Date();
-    app_handle.update_clock(date.pattern("yy-MM-dd hh:mm"));
+    app_handle.update_clock(date.pattern("yy-MM-dd HH:mm"));
 }
 
 
@@ -973,7 +1066,7 @@ function xhbalancetozeroshortcutcallback(res){
 }
 function xhbalanceforceflashstatus(){
     xhbalancegetstatus_force();
-    xhbalancegetlight_force();
+    //xhbalancegetlight_force();
 
 }
 function xhbalancestartcasecallback(res){
@@ -1072,8 +1165,8 @@ function xhbalancestatuscallback(res){
     if(res.jsonResult.auth == "false"){
         return;
     }
-    let detailstatus = res.jsonResult.ret;
-    app_handle.update_status(detailstatus);
+    //let detailstatus = res.jsonResult.ret;
+    //app_handle.update_status(detailstatus);
 }
 
 function xhbalancegetlight(){
@@ -1630,7 +1723,12 @@ function show_expiredModule(){
     modal_middle($('#ExpiredAlarm'));
     $('#ExpiredAlarm').modal('show') ;
 }
-
+function show_Module(msg){
+    $('#ExpiredAlertModalContent').empty();
+    $('#ExpiredAlertModalContent').append(msg);
+    modal_middle($('#ExpiredAlarm'));
+    $('#ExpiredAlarm').modal('show') ;
+}
 function delete_configure(){
     if(activeconf === null) return;
     var body = {
@@ -1778,16 +1876,241 @@ function sysversionfetch(){
 }
 function sysversionfetchcallback(res){
     if(res.jsonResult.status == "false"){
-        alert("Fetal Error, Can not get language file!");
+        alert("Fetal Error, Can not get version info!");
         windows.close();
     }
     if(res.jsonResult.auth == "false"){
-        alert("Fetal Error, Can not get language file!");
+        alert("Fetal Error, Can not get version info!");
         windows.close();
     }
     let version=res.jsonResult.ret;
     app_handle.updateVersion(version);
 
+}
+function changepasswordfetch(username,oldpassword,newpassword){
+    var body={
+        username:username,
+        password:oldpassword,
+        newpassword:newpassword
+    }
+    var map={
+        action:"XH_Balance_change_passwd",
+        body:body,
+        type:"mod",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(changepasswordfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function changepasswordfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        show_Module(res.msg);
+        return;//windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not change password!");
+        windows.close();
+    }
+    //show_Module("修改成功，请重新登陆");
+    show_Module(language.message.message11);
+    app_handle.loginview();
+
+}
+function flushuserlistfetch(){
+    var map={
+        action:"XH_Balance_get_user_list",
+        type:"query",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(flushuserlistfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function flushuserlistfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        alert("Fetal Error, Can not get user list!");
+        windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not get user list!");
+        windows.close();
+    }
+    let userlist = res.jsonResult.ret;
+    app_handle.set_user_list(userlist);
+}
+function resetuserfetch(username){
+    var map={
+        action:"XH_Balance_reset_user",
+        body:{
+            username:username
+        },
+        type:"mod",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(resetuserfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function resetuserfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        alert("Fetal Error, Can not reset user password!");
+        windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not reset user password!");
+        windows.close();
+    }
+    //show_Module("重置成功，默认密码为123456！");
+    show_Module(language.message.message12);
+}
+
+function newuserfetch(username){
+    var map={
+        action:"XH_Balance_new_user",
+        body:{
+            username:username
+        },
+        type:"mod",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(newuserfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function newuserfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        show_Module(res.msg);
+        return;
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not new user!");
+        windows.close();
+    }
+    //show_Module("新建成功，默认密码为123456！");
+    show_Module(language.message.message13);
+    flushuserlistfetch();
+}
+function deluserfetch(username){
+    var map={
+        action:"XH_Balance_del_user",
+        body:{
+            username:username
+        },
+        type:"mod",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(deluserfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function deluserfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        alert("Fetal Error, Can not delete user!");
+        windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not delete user!");
+        windows.close();
+    }
+    //show_Module("删除成功！");
+    show_Module(language.message.message2);
+    flushuserlistfetch();
+}
+
+function fetchmqtt(username){
+    var map={
+        action:"XH_Balance_mqtt_conf",
+        type:"query",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(fetchmqttcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function fetchmqttcallback(res){
+    if(res.jsonResult.status == "false"){
+        alert("Fetal Error, Can not get mqtt configure!");
+        windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, Can not get mqtt configur!");
+        windows.close();
+    }
+    mqttconf = res.jsonResult.ret;
+    initialize_mqtt();
 }
 
 

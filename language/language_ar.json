@@ -50,6 +50,20 @@
     "modalconfirm":"confirm",
     "modalcancel":"cancel"
   },
+  "userview":{
+    "title":"Password change",
+    "oldpassword":"oldpassword",
+    "newpassword":"newpassword",
+    "renewpassword":"renewpassword",
+    "confirm":"Confirm",
+    "titleadmin":"Admin Tools",
+    "titlenewuser":"Create New User",
+    "newuser":"new user name",
+    "new":"create",
+    "userlist":"userlist",
+    "tippasswordnowsame":"Password is not same",
+    "tipusernametoolong":"user name max length 10"
+  },
   "workview":{
     "alarmbar":{
       "button":"REMOVE",
@@ -128,6 +142,9 @@
     "alert8":"Modify config save error!",
     "alert9":"System config save error!",
     "alert10":"Debug command error!",
+    "message11":"Modify success, please login with new password!",
+    "message12":"Reset success, default password is 123456!",
+    "message13":"Create success, default password is 123456!",
     "message1":"Warning:Delete Fail!!!",
     "message2":"Delete successfully!",
     "message3":"run successfully!",

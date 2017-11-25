@@ -63,6 +63,7 @@ export default class alarmbar extends Component {
         this.setState({hide:"block"});
     }
     setError(error){
+        //console.log(error);
         let error_title=error.split(":")[0];
         let error_conent=(error.split(":")[1]).split(";");
         this.setState({content:error_title,content1:error_conent[0],content2:error_conent[1],content3:error_conent[2]});
