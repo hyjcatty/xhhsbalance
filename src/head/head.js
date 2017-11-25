@@ -44,6 +44,13 @@ export default class head extends Component {
         this.setState({username:username});
         this.show_button();
     }
+    show_user_button(buser){
+        if(buser){
+            this.show_button();
+        }else{
+            this.hide_button();
+        }
+    }
     hide_button(){
         this.setState({hideUser:"none"});
     }

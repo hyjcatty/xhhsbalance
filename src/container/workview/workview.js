@@ -76,6 +76,7 @@ export default class workview extends Component {
         return this.state.configuration;
     }
     modview(configuration){
+        this.props.workcontrolhead(true);
         this.props.workcontrolfoot(false,true,false);
         this.setState({configuration:configuration,status:"mod"});
         this.refs.Configurationview.modify_view(configuration);
@@ -86,6 +87,7 @@ export default class workview extends Component {
         this.show();
     }
     runview(configuration){
+        this.props.workcontrolhead(true);
         this.props.workcontrolfoot(false,true,false);
         if(configuration!==null){
             this.setState({configuration:configuration,status:"run"});
@@ -102,6 +104,7 @@ export default class workview extends Component {
         this.show();
     }
     newview(configuration){
+        this.props.workcontrolhead(true);
         this.props.workcontrolfoot(false,true,false);
         this.setState({configuration:configuration,status:"new"});
         let configuration_local = configuration;
@@ -114,6 +117,7 @@ export default class workview extends Component {
         this.show();
     }
     runningview(configuration){
+        this.props.workcontrolhead(false);
         this.props.workcontrolfoot(false,false,false);
         if(configuration!==null){
             this.setState({configuration:configuration,status:"running"});

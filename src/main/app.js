@@ -102,6 +102,7 @@ class App extends Component{
         this._workstartcase=this.startcase.bind(this);
         this._workstopcase=this.stopcase.bind(this);
         this._workcontrolfoot=this.footButtonShow.bind(this);
+        this._workcontrolhead=this.headButtonShow.bind(this);
         this._worksavenewcase=this.savenewcase.bind(this);
         this._worksavemodcase=this.savemodcase.bind(this);
         this._newusercallback=this.newuser.bind(this);
@@ -194,6 +195,10 @@ class App extends Component{
     }
     hidealarm(){
         this.refs.Workview.hidealarm();
+    }
+    headButtonShow(buser){
+
+        this.refs.head.show_user_button(buser);
     }
     footButtonShow(blanguage,bmain,bdebug){
         this.refs.foot.show_return_button(bmain);
@@ -526,7 +531,7 @@ class App extends Component{
                 <Languageview ref="Languageview"/>
                 <Loginview ref="Loginview"/>
                 <Brickview ref="Brickview"/>
-                <Workview ref="Workview" workstartcase={this._workstartcase} workstopcase={this._workstopcase} workcontrolfoot={this._workcontrolfoot} worksavenewcase={this._worksavenewcase} worksavemodcase={this._worksavemodcase}/>
+                <Workview ref="Workview" workstartcase={this._workstartcase} workstopcase={this._workstopcase} workcontrolfoot={this._workcontrolfoot} worksavenewcase={this._worksavenewcase} worksavemodcase={this._worksavemodcase} workcontrolhead={this._workcontrolhead}/>
                 <Userview ref="Userview" newusercallback={this._newusercallback}
                           delusercallback={this._delusercallback}
                           resetusercallback={this._resetusercallback}
@@ -550,6 +555,22 @@ class App extends Component{
                         <div className="modal-footer">
                             <button type="button" className="btn btn-default" data-dismiss="modal">{this.state.language.app.modalcancel}</button>
                             <button type="button" className="btn btn-default" data-dismiss="modal" id="ExpiredConfirm">{this.state.language.app.modalconfirm}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="modal fade" id="ExpiredAlarm2" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" >
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 className="modal-title" id="ExpiredAlertModalLabel2">{this.state.language.app.modalhead}</h4>
+                        </div>
+                        <div className="modal-body" id="ExpiredAlertModalContent2">
+                            {this.state.language.app.modaltips}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-default" data-dismiss="modal" >{this.state.language.app.modalconfirm}</button>
                         </div>
                     </div>
                 </div>
@@ -1717,17 +1738,17 @@ function modal_middle(modal){
 function show_expiredModule(){
     activeconf = app_handle.get_active_configuration();
     if(activeconf === null) return;
-    let warning_content =  language.message5+" ["+activeconf.name+"]?";
+    let warning_content =  language.message.message5+" ["+activeconf.name+"]?";
     $('#ExpiredAlertModalContent').empty();
     $('#ExpiredAlertModalContent').append(warning_content);
     modal_middle($('#ExpiredAlarm'));
     $('#ExpiredAlarm').modal('show') ;
 }
 function show_Module(msg){
-    $('#ExpiredAlertModalContent').empty();
-    $('#ExpiredAlertModalContent').append(msg);
-    modal_middle($('#ExpiredAlarm'));
-    $('#ExpiredAlarm').modal('show') ;
+    $('#ExpiredAlertModalContent2').empty();
+    $('#ExpiredAlertModalContent2').append(msg);
+    modal_middle($('#ExpiredAlarm2'));
+    $('#ExpiredAlarm2').modal('show') ;
 }
 function delete_configure(){
     if(activeconf === null) return;
