@@ -11,6 +11,7 @@ var mqtt  = require('mqtt');
 //});
 
 var start = false;
+var calibration_start=false;
 
 var client  = mqtt.connect('mqtt://127.0.0.1',{
     username:'username',
@@ -23,20 +24,23 @@ client.on('connect', function () {
     client.subscribe('MQTT_XH_High_Speed_Balance_HCU');
 
     setInterval(function(){
+        if(!calibration_start) return;
+        client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationdynamicinfo());
+    },6000);
+    setInterval(function(){
         if(!start) return;
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
     },600);
-
     setInterval(function(){
         if(!start) return;
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildalarminfo());
-    },60000);
+    },600000);
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildversioninfo());
-    },60000);
+    },600000);
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', builddebuginfo());
-    },60000);
+    },600000);
     //client.publish('MQTT_TOPIC_UI_TO_HCU', 'Hello mqtt['+i+']');
 });
 
@@ -57,6 +61,14 @@ client.on('message', function (topic, message) {
          start = false;
      }else if(msg.action== "XH_High_Speed_Balance_force_flush"){
          client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
+     }else if(msg.action == "XH_High_Speed_Balance_calibration_dynamic_start"){
+         calibration_start = true
+     }else if(msg.action == "XH_High_Speed_Balance_calibration_dynamic_stop"){
+         calibration_start = false;
+     }else if(msg.action == "XH_High_Speed_Balance_calibration_zero_trigger"){
+         client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationzeroinfo());
+     }else if(msg.action == "XH_High_Speed_Balance_calibration_weight_trigger"){
+         client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationweightinfo());
      }
 
 });
@@ -151,7 +163,52 @@ function builddebuginfo(){
     }
     return JSON.stringify(version);
 }
-
+function buildcalibrationzeroinfo(){
+    var balance="1";
+    var ret = {
+        action:"XH_High_Speed_Balance_calibration_zero_status",
+        data:{
+            balance:balance,
+            msg:parseFloat(GetRandomNum(0,500))/1000
+        }
+    }
+    return JSON.stringify(ret);
+}
+function buildcalibrationweightinfo(){
+    var balance="1";
+    var ret = {
+        action:"XH_High_Speed_Balance_calibration_weight_status",
+        data:{
+            balance:balance,
+            msg:parseFloat(GetRandomNum(0,5000))
+        }
+    }
+    return JSON.stringify(ret);
+}
+function buildcalibrationdynamicinfo(){
+    var balance="1";
+    var status = false;
+    var temp = GetRandomNum(0,500);
+    if(temp>400) status = true
+    var ret = {
+        action:"XH_High_Speed_Balance_calibration_dynamic_status",
+        data:{
+                balance:balance,
+                status:status,
+                value:[{
+                    name:'trynumber',
+                    value:GetRandomNum(0,50),
+                },{
+                    name:'bias',
+                    value:GetRandomNum(0,100)+"%",
+                },{
+                    name:"msg",
+                    value:"ret msg",
+                }]
+        }
+    }
+    return JSON.stringify(ret);
+}
 function GetRandomNum(Min,Max)
 {
     var Range = Max - Min;

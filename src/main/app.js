@@ -44,6 +44,7 @@ class App extends Component{
             buttonlist: [],
             iconlist:[],
             runcallback:null,
+            caliruncallback:null,
             stopcallback:null,
             savenewback:null,
             savemodback:null,
@@ -99,6 +100,8 @@ class App extends Component{
         this._footcallbackexport=this.exportview.bind(this);
         this._footcallbackcalibration=this.calibrationview.bind(this);
         this._footcallbacklanguage=this.languageview.bind(this);
+        this._calistartcase=this.calistart.bind(this);
+        this._calistopcase=this.calistop.bind(this);
         this._workstartcase=this.startcase.bind(this);
         this._workstopcase=this.stopcase.bind(this);
         this._workcontrolfoot=this.footButtonShow.bind(this);
@@ -181,8 +184,8 @@ class App extends Component{
         this.refs.foot.update_callback_delete(callback_delete);
         //this.refs.foot.update_callback_configure(callback_configure);
     }
-    initializerunstop(runcallback,stopcallback){
-        this.setState({runcallback:runcallback,stopcallback:stopcallback});
+    initializerunstop(runcallback,stopcallback,caliruncallback){
+        this.setState({runcallback:runcallback,stopcallback:stopcallback,caliruncallback:caliruncallback});
     }
     initializerunsave(newsave,modsave){
         this.setState({savenewback:newsave,savemodback:modsave});
@@ -442,6 +445,9 @@ class App extends Component{
     update_cali_status(balanceNo,status,weight){
         this.refs.Calibrationview.update_balance_status(balanceNo,status,weight);
     }
+    update_cali_dynamic_status(status){
+        this.refs.Calibrationview.update_dynamic_status(status);
+    }
     configureview(){
         alert("not support yet!");
     }
@@ -468,6 +474,12 @@ class App extends Component{
     }
     getuser(){
         return this.state.userid;
+    }
+    calistart(){
+        this.state.caliruncallback(true);
+    }
+    calistop(){
+        this.state.caliruncallback(false);
     }
     startcase(configure){
         this.state.runcallback(true,configure);
@@ -527,7 +539,7 @@ class App extends Component{
                 <Sysconfview ref="Sysconfview"/>
                 <Sysdebug ref="Sysdebugview"/>
                 <Exportview ref="Exportview"/>
-                <Calibrationview ref="Calibrationview"/>
+                <Calibrationview ref="Calibrationview" calistartcase={this._calistartcase} calistopcase={this._calistopcase} workcontrolfoot={this._workcontrolfoot} workcontrolhead={this._workcontrolhead}/>
                 <Languageview ref="Languageview"/>
                 <Loginview ref="Loginview"/>
                 <Brickview ref="Brickview"/>
@@ -660,6 +672,12 @@ function initialize_mqtt(){
                 app_handle.debug_label_update(ret.data);
                 //app_handle.update_animateview_statistics(ret.data);
                 break;
+            case "XH_High_Speed_Balance_calibration_zero_status":
+                app_handle.update_cali_status(ret.data.balance,1,ret.data.msg);break;
+            case "XH_High_Speed_Balance_calibration_weight_status":
+                app_handle.update_cali_status(ret.data.balance,2,ret.data.msg);break;
+            case "XH_High_Speed_Balance_calibration_dynamic_status":
+                app_handle.update_cali_dynamic_status(ret.data);break;
             default:
                 return;
         }
@@ -684,7 +702,7 @@ function systemstart(){
     app_handle.initializehead();
     app_handle.initializeLogin(xhbalancelogin);
     app_handle.initializeWork(newviewabort,balance_clear_alarm);
-    app_handle.initializerunstop(xhbalancestartcase,xhbalancestartcase);
+    app_handle.initializerunstop(xhbalancestartcase,xhbalancestartcase,balance_dynamic_cali);
     app_handle.initializerunsave(xhbalancesavenewconf,xhbalancesavemodconf);
     app_handle.initializeforceflash(xhbalanceforceflashstatus);
     app_handle.initializeCalibration(balance_to_zero,balance_to_countweight);
@@ -1575,6 +1593,48 @@ function footcallback_save(){
     xhbalancesavesysconf(app_handle.getsysconfset());
 
 }
+function balance_dynamic_cali(bool){
+    let action="stop";
+    if(bool) action = "start";
+    let body={
+        action:action
+    }
+    var map={
+        action:"XH_Balance_cali_run",
+        body:body,
+        type:"mod",
+        lang:default_language,
+        user:app_handle.getuser()
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(balance_dynamic_cali_callback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function balance_dynamic_cali_callback(res){
+    //let balanceNo= res.jsonResult.ret.balance;
+    if(res.jsonResult.status == "false"){
+        //app_handle.update_cali_status(balanceNo,3,"");
+        return;
+    }
+    if(res.jsonResult.auth == "false"){
+        //app_handle.update_cali_status(balanceNo,3,"");
+        return;
+    }
+    //app_handle.update_cali_status(balanceNo,1,res.jsonResult.msg);
+}
+
+
 function balance_to_zero(balanceno){
     var body={
         balance:(balanceno)+""
@@ -1602,18 +1662,18 @@ function balance_to_zero(balanceno){
         });
 }
 function balance_to_zero_callback(res){
-    let balanceNo= res.jsonResult.ret.balance;
+    //let balanceNo= res.jsonResult.ret.balance;
     if(res.jsonResult.status == "false"){
-        app_handle.update_cali_status(balanceNo,3,"");
+        //app_handle.update_cali_status(balanceNo,3,"");
         return;
     }
     if(res.jsonResult.auth == "false"){
-        app_handle.update_cali_status(balanceNo,3,"");
+        //app_handle.update_cali_status(balanceNo,3,"");
         return;
     }
-    app_handle.update_cali_status(balanceNo,1,res.jsonResult.msg);
+    //app_handle.update_cali_status(balanceNo,1,res.jsonResult.msg);
 }
-function balance_to_countweight(balanceno,callback){
+function balance_to_countweight(balanceno){
     var body={
         balance:(balanceno)+""
     }
@@ -1640,16 +1700,16 @@ function balance_to_countweight(balanceno,callback){
         });
 }
 function balance_to_countweight_callback(res){
-    let balanceNo= res.jsonResult.ret.balance;
+    //let balanceNo= res.jsonResult.ret.balance;
     if(res.jsonResult.status == "false"){
-        app_handle.update_cali_status(balanceNo,3,"");
+        //app_handle.update_cali_status(balanceNo,3,"");
         return;
     }
     if(res.jsonResult.auth == "false"){
-        app_handle.update_cali_status(balanceNo,3,"");
+        //app_handle.update_cali_status(balanceNo,3,"");
         return;
     }
-    app_handle.update_cali_status(balanceNo,2,res.jsonResult.msg);
+    //app_handle.update_cali_status(balanceNo,2,res.jsonResult.msg);
 }
 
 function balance_get_alarm(){

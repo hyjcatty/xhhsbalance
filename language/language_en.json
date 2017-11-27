@@ -21,10 +21,17 @@
     "pnotifytitle":"System version:"
   },
   "calibrationview":{
+    "buttontitlestart":"start",
+    "buttontitlestop":"stop",
+    "titlestatic":"Static Calibration",
+    "titledynamic":"Dynamic Calibration",
     "calibrationunit":{
       "title":"#Balance:",
       "statusempty":"keep empty",
       "statuserror":"error"
+    },
+    "dynamiccalibrationunit":{
+      "title":"Balance:"
     }
   },
   "loginview":{

@@ -638,6 +638,21 @@ switch ($key){
 
             $jsonencode = _encode($retval);
             echo $jsonencode; break;
+        case "XH_Balance_cali_run":
+            $body=$payload["body"];
+            $sta='true';
+            $retval=array(
+                'status'=>$sta,
+                'auth'=>'true',
+                'msg'=>'12345'
+            );
+            //send mqtt message
+            $action = $body["action"];
+            $bool = false;
+            if($action == "start") $bool=true;
+            calidynamic($bool);
+            $jsonencode = _encode($retval);
+            echo $jsonencode; break;
         case "XH_Balance_cali_to_zero":
             $body=$payload["body"];
             $balance = $body["balance"];
@@ -647,10 +662,11 @@ switch ($key){
             );
             $retval=array(
                 'status'=>$sta,
-                'ret'=>$ret,
+                //'ret'=>$ret,
                 'auth'=>'true',
                 'msg'=>'12345'
             );
+            calizero();
             $jsonencode = _encode($retval);
             echo $jsonencode; break;
         case "XH_Balance_cali_to_countweight":
@@ -664,10 +680,11 @@ switch ($key){
             );
             $retval=array(
                 'status'=>$sta,
-                'ret'=>$ret,
+               // 'ret'=>$ret,
                 'auth'=>'true',
                 'msg'=>(string)$returnweight
             );
+            caliweight();
             $jsonencode = _encode($retval);
             echo $jsonencode; break;
     case "XH_Balance_get_alarm": //Use Wechat to login the Server, response is the userID in system.
@@ -836,6 +853,68 @@ switch ($key){
 	default:
 
 	break;
+}
+function calizero(){
+    $server = "127.0.0.1";     // change if necessary
+    $port = 1883;                     // change if necessary
+    $username = "";                   // set your username
+    $password = "";                   // set your password
+    $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+    $mqtt = new phpMQTT($server, $port, $client_id);
+    if(!$mqtt->connect(true, NULL, $username, $password)) {
+        exit(1);
+    }
+    $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+    //$mqtt->subscribe($topics, 0);
+    $retval=array(
+                       'action'=>'XH_High_Speed_Balance_calibration_zero_trigger'
+                   );
+
+    $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
+
+    $mqtt->close();
+}
+function caliweight(){
+    $server = "127.0.0.1";     // change if necessary
+    $port = 1883;                     // change if necessary
+    $username = "";                   // set your username
+    $password = "";                   // set your password
+    $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+    $mqtt = new phpMQTT($server, $port, $client_id);
+    if(!$mqtt->connect(true, NULL, $username, $password)) {
+        exit(1);
+    }
+    $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+    //$mqtt->subscribe($topics, 0);
+    $retval=array(
+                       'action'=>'XH_High_Speed_Balance_calibration_weight_trigger'
+                   );
+
+    $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
+
+    $mqtt->close();
+}
+function calidynamic($bool){
+    $server = "127.0.0.1";     // change if necessary
+    $port = 1883;                     // change if necessary
+    $username = "";                   // set your username
+    $password = "";                   // set your password
+    $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+    $mqtt = new phpMQTT($server, $port, $client_id);
+    if(!$mqtt->connect(true, NULL, $username, $password)) {
+        exit(1);
+    }
+    $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+    //$mqtt->subscribe($topics, 0);
+    $action = 'XH_High_Speed_Balance_calibration_dynamic_stop';
+    if($bool) $action = 'XH_High_Speed_Balance_calibration_dynamic_start';
+    $retval=array(
+                       'action'=>$action
+                   );
+
+    $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
+
+    $mqtt->close();
 }
 function flushUI(){
     $server = "127.0.0.1";     // change if necessary
