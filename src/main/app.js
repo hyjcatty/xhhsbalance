@@ -531,7 +531,7 @@ class App extends Component{
     }
     render() {
         return(
-        <div>
+        <div style={{overflowY:'hidden',overflowX:'hidden'}}>
             <div>
                 <Head ref="head" headcallbackuser={this._headcallbackuser}/>
             </div>
