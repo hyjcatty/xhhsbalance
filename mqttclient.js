@@ -89,7 +89,7 @@ function buildstatisticsinfo(){
         "LGRAY",
         "DBLUE"];
     var smalllabellist=[];
-    for(var i=0;i<9;i++){
+    for(var i=0;i<11;i++){
         var templabel={
             title:"test title",
             unit:"note",

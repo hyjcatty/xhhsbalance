@@ -3,14 +3,13 @@ $server = "127.0.0.1";     // change if necessary
 $port = 1883;                     // change if necessary
 $username = "";                   // set your username
 $password = "";                   // set your password
-$client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+$client_id = "MQTT_XH_High_Speed_Balance_PHP2"; // make sure this is unique for connecting to sever - you could use uniqid()
 $mqtt = new phpMQTT($server, $port, $client_id);
 if(!$mqtt->connect(true, NULL, $username, $password)) {
 	exit(1);
 }
-$topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
-$mqtt->subscribe($topics, 0);
-/*
+$topics['MQTT_XH_High_Speed_Balance_PHP2'] = array("qos" => 0, "function" => "procmsg");
+//$mqtt->subscribe($topics, 0);
 $retval=array(
     'action'=>'XH_Double_Line_Balance_config_start'
 );
@@ -18,14 +17,9 @@ $retval=array(
 
 
 
-$mqtt->publish('MQTT_XH_High_Speed_Balance_PHP', _encode($retval));
-*/
+$mqtt->publish('hello', _encode($retval));
 function procmsg($topic,$msg){
-        echo "test";
-        //echo "Msg Recieved: ".date("r")."\nTopic:{$topic}\n$msg\n";
-}
-while($mqtt->proc()){
-    //echo "wait";
+        echo "Msg Recieved: ".date("r")."\nTopic:{$topic}\n$msg\n";
 }
 
 $mqtt->close();

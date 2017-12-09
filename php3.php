@@ -1,67 +1,32 @@
 <?php
-$server = "127.0.0.1";     // change if necessary
-$port = 1883;                     // change if necessary
-$username = "";                   // set your username
-$password = "";                   // set your password
-$client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
-$mqtt = new phpMQTT($server, $port, $client_id);
-if(!$mqtt->connect(true, NULL, $username, $password)) {
-	exit(1);
+
+
+$mqtt = new phpMQTT("localhost", 1883, "hyj");
+
+if(!$mqtt->connect()){
+    exit(1);
 }
-$topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
-$mqtt->subscribe($topics, 0);
-/*
-$retval=array(
-    'action'=>'XH_Double_Line_Balance_config_start'
-);
 
+$topics['hello/world'] = array("qos"=>0, "function"=>"procmsg");
+$mqtt->subscribe($topics,0);
 
-
-
-$mqtt->publish('MQTT_XH_High_Speed_Balance_PHP', _encode($retval));
-*/
-function procmsg($topic,$msg){
-        echo "test";
-        //echo "Msg Recieved: ".date("r")."\nTopic:{$topic}\n$msg\n";
-}
-while($mqtt->proc()){
-    //echo "wait";
-}
+while($mqtt->proc()){}
 
 $mqtt->close();
-
-function _encode($arr)
-{
-  $na = array();
-  foreach ( $arr as $k => $value ) {
-    $na[_urlencode($k)] = _urlencode ($value);
-  }
-  return addcslashes(urldecode(json_encode($na)),"\r\n");
+function procmsg($topic, $msg){
+  echo "Msg Recieved: $msg\n";
 }
 
-function _urlencode($elem)
-{
-  if(is_array($elem)&&(!(empty($elem)))){
-    foreach($elem as $k=>$v){
-      $na[_urlencode($k)] = _urlencode($v);
-    }
-    return $na;
-  }
-  if(is_array($elem)&&empty($elem)){
-	  return $elem;
-  }
-  return urlencode($elem);
-}
 
 
 
 class phpMQTT {
-	private $socket; 			/* holds the socket	*/
+	private $socket=8080;           /* holds the socket */
 	private $msgid = 1;			/* counter for message id */
 	public $keepalive = 10;		/* default keepalive timmer */
 	public $timesinceping;		/* host unix time, used to detect disconects */
 	public $topics = array(); 	/* used to store currently subscribed topics */
-	public $debug = false;		/* should output debug messages */
+	public $debug = true;		/* should output debug messages */
 	public $address;			/* broker address */
 	public $port;				/* broker port */
 	public $clientid;			/* client id sent to brocker */
@@ -196,13 +161,15 @@ class phpMQTT {
 		$cmd +=	($qos << 1);
 		$head = chr($cmd);
 		$head .= chr($i);
-
+        echo "head:[".$head."]";
+        echo "buffer:[".$buffer."]\n";
 		fwrite($this->socket, $head, 2);
 		fwrite($this->socket, $buffer, $i);
+		/*
 		$string = $this->read(2);
 
 		$bytes = ord(substr($string,1,1));
-		$string = $this->read($bytes);
+		$string = $this->read($bytes);*/
 	}
 	/* ping: sends a keep alive ping */
 	function ping(){
@@ -315,6 +282,7 @@ class phpMQTT {
 					$this->timesinceping = time();
 				}
 			}
+
 			if($this->timesinceping < (time() - $this->keepalive )){
 				if($this->debug) echo "not found something so ping\n";
 				$this->ping();
@@ -377,3 +345,17 @@ class phpMQTT {
 			}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>

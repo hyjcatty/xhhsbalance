@@ -1971,8 +1971,8 @@ function sysversionfetchcallback(res){
 function changepasswordfetch(username,oldpassword,newpassword){
     var body={
         username:username,
-        password:oldpassword,
-        newpassword:newpassword
+        password:b64_sha1(oldpassword),
+        newpassword:b64_sha1(newpassword)
     }
     var map={
         action:"XH_Balance_change_passwd",

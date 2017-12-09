@@ -55,7 +55,10 @@ export default class billboardview extends Component {
                 {"title":"Speed Package", "unit":"pcs/min",value: 179, color: "RED"},
                 {"title":"Speed Weight", "unit":"g/min",value: 179, color: "RED"},
                 {"title":"Error Count", "unit":"times",value: 121, color: "RED"},
+                {"title":"Error Notes", "unit":"Please notice",value: "information", color: "RED"},
+                {"title":"Error Count", "unit":"times",value: 121, color: "RED"},
                 {"title":"Error Notes", "unit":"Please notice",value: "information", color: "RED"}],
+
             detailvalue: [
                 {value: 179, color: "RED", subvalue: "3%", subcolor: "RED"},
                 {value: 179, color: "RED", subvalue: "3%", subcolor: "GREED"},
@@ -171,7 +174,7 @@ export default class billboardview extends Component {
         //}
     }
     flash_status(){
-        for(let i=1;i<10;i++){
+        for(let i=1;i<12;i++){
             this.refs['Label1x'+i].updateprop(this.colorlist[this.state.showlist.mainvalue[i-1].color],this.state.showlist.mainvalue[i-1].value);
             this.refs['Label1x'+i].initialize(this.state.showlist.mainvalue[i-1].title,this.state.showlist.mainvalue[i-1].unit);
         }/*
@@ -205,32 +208,38 @@ export default class billboardview extends Component {
                             <Labelbig ref="Labelbigboard"/>
                         </div>
                     </div>
-                    <div key = "Label1x1" style={{width:this.state.width*0.20,float: "left",position:"relative"}}>
+                    <div key = "Label1x1" style={{width:this.state.width*0.21,float: "left",position:"relative"}}>
                         <Label1 ref="Label1x1"/>
                     </div>
-                    <div key = "Label1x2" style={{width:this.state.width*0.20,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x2" style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x2"/>
                     </div>
-                    <div key = "Label1x3" style={{width:this.state.width*0.46,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x3" style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x3"/>
                     </div>
-                    <div key = "Label1x4"  style={{width:this.state.width*0.20,float: "left",position:"relative"}}>
+                    <div key = "Label1x4"  style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x4"/>
                     </div>
-                    <div key = "Label1x5"  style={{width:this.state.width*0.20,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x5"  style={{width:this.state.width*0.21,float: "left",position:"relative"}}>
                         <Label1 ref="Label1x5"/>
                     </div>
-                    <div key = "Label1x6" style={{width:this.state.width*0.46,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x6" style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x6"/>
                     </div>
-                    <div key = "Label1x7"  style={{width:this.state.width*0.20,float: "left",position:"relative"}}>
+                    <div key = "Label1x7"  style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x7"/>
                     </div>
-                    <div key = "Label1x8" style={{width:this.state.width*0.20,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x8" style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
                         <Label1 ref="Label1x8"/>
                     </div>
-                    <div key = "Label1x9" style={{width:this.state.width*0.46,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                    <div key = "Label1x9" style={{width:this.state.width*0.21,float: "left",position:"relative"}}>
                         <Label1 ref="Label1x9"/>
+                    </div>
+                    <div key = "Label1x10" style={{width:this.state.width*0.21,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                        <Label1 ref="Label1x10"/>
+                    </div>
+                    <div key = "Label1x11" style={{width:this.state.width*0.44,float: "left",position:"relative",marginLeft:this.state.width*0.02}}>
+                        <Label1 ref="Label1x11"/>
                     </div>
                 </div>
             </div>
