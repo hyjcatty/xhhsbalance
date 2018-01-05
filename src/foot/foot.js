@@ -93,8 +93,11 @@ export default class foot extends Component {
         this.setState({height:height})
     }
     update_content(content){
-        this.setState({content:content})
+        let local =content;
+        if(local.length>56) local=local.substr(0,56);
+        this.setState({content:local});
     }
+
 
     update_callback_tozero(callback){
         this.setState({callbackTozero:callback})
@@ -343,6 +346,7 @@ export default class foot extends Component {
         }
     }
     render() {
+        /*
         let buttonstyle='';
         if(this.state.version.Alarm){
             buttonstyle = <button  type="button" className="btn btn-warning btn-sm pull-right" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,backgroundColor:"#FF0000"}} disabled={this.state.disabled} onClick={this.handle_click_version.bind(this)}>
@@ -352,7 +356,7 @@ export default class foot extends Component {
             buttonstyle =<button  type="button" className="btn btn-warning btn-sm pull-right" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6}} disabled={this.state.disabled} onClick={this.handle_click_version.bind(this)}>
                 <i className="fa fa-newspaper-o" style={{fontSize:25}}> </i>
             </button>
-        }
+        }*/
         return (
             /*
             <div style={{position:"relative",background:"#eeeeee",height:this.state.height,width:'100%',display:'table'}}>
@@ -373,7 +377,7 @@ export default class foot extends Component {
             <div style={{position:"relative",background:"#eeeeee",height:this.state.height,width:'100%',display:'table'}}>
                 <div style={{position:"relative",background:"#eeeeee",height:this.state.height,width:'50%',display:'table',float:"left"}}>
 
-                    <button  type="button" className="btn btn-warning btn-sm pull-left" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,display:this.state.hideReturn}} disabled={this.state.disabled} onClick={this.handle_click_return.bind(this)}>
+                    <button  type="button" className="btn btn-warning btn-sm pull-left" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,display:"none"}} disabled={this.state.disabled} onClick={this.handle_click_return.bind(this)}>
                         <i className="fa fa-sign-out" style={{fontSize:25}}> </i>
                     </button>
                     <button  type="button" className="btn btn-warning btn-sm pull-left" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,display:this.state.hideBrick}} disabled={this.state.disabled} onClick={this.handle_click_brick.bind(this)}>
@@ -401,7 +405,7 @@ export default class foot extends Component {
 
                 <div style={{position:"relative",background:"#eeeeee",height:this.state.height,width:'50%',display:'table',float:"left"}}>
                     <a style={{position:"relative",height:this.state.height,display:'table-cell',verticalAlign:'middle'}}>
-                        < span className="headlabel pull-right" style={{fontSize:this.state.height*0.3,marginRight:this.state.height*0.3}}>{this.state.language.content}</span>
+                        < span className="headlabel pull-right" style={{fontSize:this.state.height*0.3,marginRight:this.state.height*0.3}}>{this.state.content}</span>
                     </a>
                     <button  type="button" className="btn btn-warning btn-sm pull-right" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,display:this.state.hideSave}} disabled={this.state.disabled} onClick={this.handle_click_save.bind(this)}>
                         <i className="fa fa-save" style={{fontSize:25}}> </i>
@@ -412,7 +416,6 @@ export default class foot extends Component {
                     <button  type="button" className="btn btn-warning btn-sm pull-right" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.height-10),width:(this.state.height-10)*1.6,display:this.state.hideDelete}} disabled={this.state.disabled} onClick={this.handle_click_delete.bind(this)}>
                         <i className="fa fa-trash-o" style={{fontSize:25}}> </i>
                     </button>
-                    {buttonstyle}
                 </div>
             </div>
         );

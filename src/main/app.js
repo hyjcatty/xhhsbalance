@@ -113,6 +113,7 @@ class App extends Component{
         this._resetusercallback=this.resetuser.bind(this);
         this._listusercallback=this.listuser.bind(this);
         this._changepasswordcallback=this.changepassword.bind(this);
+        this._logoutcallback=this.loginview.bind(this);
         this._headcallbackuser=this.userview.bind(this);
     }
     updateLanguage(language){
@@ -129,6 +130,9 @@ class App extends Component{
     }
     updateVersion(version){
         this.refs.foot.updateversion(version);
+    }
+    updateContent(content){
+        this.refs.foot.update_content(content);
     }
     initializeSize(width,height){
         let winlength= (width>height)?width:height;
@@ -548,7 +552,8 @@ class App extends Component{
                           delusercallback={this._delusercallback}
                           resetusercallback={this._resetusercallback}
                           listusercallback={this._listusercallback}
-                          changepasswordcallback={this._changepasswordcallback}/>
+                          changepasswordcallback={this._changepasswordcallback}
+                          logoutcallback={this._logoutcallback}/>
             </div>
             <div>
                 <Foot ref="foot" footcallbackreturn={this._footcallbackreturn} footcallbackconfigure={this._footcallbackconfigure} footcallbackdebug={this._footcallbackdebug} footcallbackexport={this._footcallbackexport} footcallbackcalibration={this._footcallbackcalibration}
@@ -660,8 +665,12 @@ function initialize_mqtt(){
                 app_handle.update_status(ret.data);
                 //console.log("updated");
                 break;
-            case "XH_High_Speed_Balance_version_status":
-                app_handle.updateVersion(ret.data);
+            //case "XH_High_Speed_Balance_version_status":
+                //app_handle.updateVersion(ret.data);
+                //app_handle.initialize_animateview_chamber(ret.data);
+                //break;
+            case "XH_Double_Line_Balance_report_status":
+                app_handle.updateContent(ret.data);
                 //app_handle.initialize_animateview_chamber(ret.data);
                 break;
             case "XH_High_Speed_Balance_alarm_status":

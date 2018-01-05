@@ -36,8 +36,8 @@ client.on('connect', function () {
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildalarminfo());
     },600000);
     setInterval(function(){
-        client.publish('MQTT_XH_High_Speed_Balance_UI', buildversioninfo());
-    },600000);
+        client.publish('MQTT_XH_High_Speed_Balance_UI', buildreportinfo());
+    },30000);
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', builddebuginfo());
     },600000);
@@ -106,6 +106,20 @@ function buildstatisticsinfo(){
         }
     }
     return JSON.stringify(ret);
+}
+function buildreportinfo(){
+    var number = GetRandomNum(1,50);
+    var msg = "status report:";
+    for(var i=0;i<number;i++){
+        msg = msg+" x"+i;
+    }
+
+
+    var version = {
+        action:"XH_Double_Line_Balance_report_status",
+        data:msg
+    }
+    return JSON.stringify(version);
 }
 function buildversioninfo(){
     var number = GetRandomNum(1,10);

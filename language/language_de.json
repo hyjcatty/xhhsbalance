@@ -69,7 +69,8 @@
     "new":"create",
     "userlist":"userlist",
     "tippasswordnowsame":"Password is not same",
-    "tipusernametoolong":"user name max length 10"
+    "tipusernametoolong":"user name max length 10",
+    "logout":"logout"
   },
   "workview":{
     "alarmbar":{

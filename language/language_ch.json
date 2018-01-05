@@ -69,7 +69,8 @@
     "new":"创建",
     "userlist":"用户列表",
     "tippasswordnowsame":"两次密码不相等",
-    "tipusernametoolong":"用户名最大长度为10字符"
+    "tipusernametoolong":"用户名最大长度为10字符",
+    "logout":"退出登录"
   },
   "workview":{
     "alarmbar":{

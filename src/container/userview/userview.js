@@ -34,7 +34,8 @@ export default class brickview extends Component {
                 "new":"create",
                 "userlist":"userlist",
                 "tippasswordnowsame":"Password is not same",
-                "tipusernametoolong":"user name max length 10"
+                "tipusernametoolong":"user name max length 10",
+                "logout":"logout"
             }
         }
     }
@@ -108,6 +109,9 @@ export default class brickview extends Component {
             return;
         }
         this.props.changepasswordcallback(this.state.localuser,oldpassword,newpassword);
+    }
+    logout(){
+        this.props.logoutcallback();
     }
     handdrag(){
 
@@ -293,6 +297,14 @@ export default class brickview extends Component {
                         </div>
                     </div>
                     <div className="tile-stats" style={{marginTop:"15px"}}>
+                        <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.logout}</div>
+                        <div className="count" style={{fontSize:20,marginTop:15,verticalAlign:'bottom',width:"90%"}} >
+                            <button type="button" id="logout_Confirm" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} onClick={this.logout.bind(this)} >
+                                {this.state.language.logout}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="tile-stats" style={{marginTop:"15px"}}>
                         <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.titlenewuser}</div>
                         <div className="count" style={{fontSize:20,marginTop:15,verticalAlign:'bottom',width:"90%"}} >
                             <div className="input-group">
@@ -359,7 +371,7 @@ export default class brickview extends Component {
                         <div className="leaderboard" style={{marginTop: this.state.margintop}}>
                             <div className="panel panel-default" id="kuang" >
                                 <div className="panel-heading">
-                                    <h3 className="panel-title" style={{color:"#000000",fontWeight:700}}>{this.state.language.title}</h3>
+                                    <h3 className="panel-title" style={{color:"#000000",fontWeight:700}}>{this.state.language.titleadmin}</h3>
                                 </div>
                                 <div className="panel-body">
                                     <div className="input-group">
@@ -379,6 +391,9 @@ export default class brickview extends Component {
                                     <p></p>
                                     <button type="button" id="changepassword_Confirm" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} onClick={this.changepassword.bind(this)} >
                                         {this.state.language.confirm}
+                                    </button>
+                                    <button type="button" id="logout_Confirm" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} onClick={this.logout.bind(this)} >
+                                        {this.state.language.logout}
                                     </button>
                                 </div>
                             </div>
