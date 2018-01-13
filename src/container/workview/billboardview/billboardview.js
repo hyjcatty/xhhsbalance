@@ -47,17 +47,17 @@ export default class billboardview extends Component {
             },
 
             mainvalue: [
-                {"title":"Target Weight", "unit":"g",value: 179, color: "RED"},
-                {"title":"Upper Weight", "unit":"g",value: 179, color: "RED"},
-                {"title":"Error Notes", "unit":"Please notice",value: "information", color: "RED"},
-                {"title":"Total Package", "unit":"pcs",value: 179, color: "RED"},
-                {"title":"Total Weight", "unit":"g",value: 179, color: "RED"},
-                {"title":"Speed Package", "unit":"pcs/min",value: 179, color: "RED"},
-                {"title":"Speed Weight", "unit":"g/min",value: 179, color: "RED"},
-                {"title":"Error Count", "unit":"times",value: 121, color: "RED"},
-                {"title":"Error Notes", "unit":"Please notice",value: "information", color: "RED"},
-                {"title":"Error Count", "unit":"times",value: 121, color: "RED"},
-                {"title":"Error Notes", "unit":"Please notice",value: "information", color: "RED"}],
+                {"title":"Target Weight", "unit":"g",value: 0, color: "LGRAY"},
+                {"title":"Upper Weight", "unit":"g",value: 0, color: "LGRAY"},
+                {"title":"Error Notes", "unit":"Please notice",value: "info", color: "LGRAY"},
+                {"title":"Total Package", "unit":"pcs",value: 0, color: "LGRAY"},
+                {"title":"Total Weight", "unit":"g",value: 0, color: "LGRAY"},
+                {"title":"Speed Package", "unit":"pcs/min",value: 0, color: "LGRAY"},
+                {"title":"Speed Weight", "unit":"g/min",value: 0, color: "LGRAY"},
+                {"title":"Error Count", "unit":"times",value: 0, color: "LGRAY"},
+                {"title":"Error Notes", "unit":"Please notice",value: "info", color: "LGRAY"},
+                {"title":"Error Count", "unit":"times",value: 0, color: "LGRAY"},
+                {"title":"Error Notes", "unit":"Please notice",value: "info", color: "LGRAY"}],
 
             detailvalue: [
                 {value: 179, color: "RED", subvalue: "3%", subcolor: "RED"},
