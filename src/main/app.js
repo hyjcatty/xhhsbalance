@@ -186,6 +186,9 @@ class App extends Component{
         this.refs.foot.update_callback_save(callback_save);
         this.refs.foot.update_callback_tozero(callback_tozero);
         this.refs.foot.update_callback_delete(callback_delete);
+        this.refs.Workview.update_callback_tozero(callback_tozero);
+        this.refs.Workview.update_callback_delete(callback_delete);
+        this.refs.Sysconfview.update_callback_save(callback_save);
         //this.refs.foot.update_callback_configure(callback_configure);
     }
     initializerunstop(runcallback,stopcallback,caliruncallback){
@@ -217,9 +220,9 @@ class App extends Component{
         this.refs.foot.show_language_button(blanguage);
     }
     footButtonShowAssistant(bsave,btozero,bdelete){
-        this.refs.foot.show_to_zero_button(btozero);
-        this.refs.foot.show_delete_button(bdelete);
-        this.refs.foot.show_save_button(bsave);
+        this.refs.foot.show_to_zero_button(false);
+        this.refs.foot.show_delete_button(false);
+        this.refs.foot.show_save_button(false);
     }
     initializeWork(work2brickcallback,work2alarmremovecallback){
         this.refs.Workview.update_callback(work2brickcallback,work2alarmremovecallback);
@@ -305,7 +308,7 @@ class App extends Component{
         this.refs.Sysdebugview.hide();
         this.refs.Exportview.hide();
         this.refs.Languageview.hide();
-        this.footButtonShowAssistant(false,true,true);
+        this.footButtonShowAssistant(false,false,false);
         if(this.state.username === "admin")
             this.footButtonShow(false,true,true);
         else
@@ -547,7 +550,12 @@ class App extends Component{
                 <Languageview ref="Languageview"/>
                 <Loginview ref="Loginview"/>
                 <Brickview ref="Brickview"/>
-                <Workview ref="Workview" workstartcase={this._workstartcase} workstopcase={this._workstopcase} workcontrolfoot={this._workcontrolfoot} worksavenewcase={this._worksavenewcase} worksavemodcase={this._worksavemodcase} workcontrolhead={this._workcontrolhead}/>
+                <Workview ref="Workview" workstartcase={this._workstartcase}
+                          workstopcase={this._workstopcase}
+                          workcontrolfoot={this._workcontrolfoot}
+                          worksavenewcase={this._worksavenewcase}
+                          worksavemodcase={this._worksavemodcase}
+                          workcontrolhead={this._workcontrolhead}/>
                 <Userview ref="Userview" newusercallback={this._newusercallback}
                           delusercallback={this._delusercallback}
                           resetusercallback={this._resetusercallback}

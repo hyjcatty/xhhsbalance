@@ -83,7 +83,9 @@
     "buttonbar":{
       "run_configure":{
         "button1":"START",
-        "button2":"MODIFY"
+        "button2":"MODIFY",
+        "button3":"DELETE",
+        "button4":"ToZero"
       },
       "calibration_configure":{
         "button1":"TO_ZERO",

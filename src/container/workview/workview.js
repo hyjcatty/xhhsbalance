@@ -30,9 +30,12 @@ export default class workview extends Component {
             status:"run",
             brickviewcallback:null,
             alarmremovecallback:null,
+            callbackTozero:null,
+            callbackDelete:null
         }
-        this._button1click=this.button1click.bind(this);
-        this._button2click=this.button2click.bind(this);
+        //this._button1click=this.button1click.bind(this);
+        //this._button2click=this.button2click.bind(this);
+        this._buttonclick=this.buttonclick.bind(this);
         this._buttonremoveclick=this.buttonremoveclick.bind(this);
 
     }
@@ -143,7 +146,7 @@ export default class workview extends Component {
     }
     back2brickview(){
         this.state.brickviewcallback();
-    }
+    }/*
     button1click(){
         if(this.state.status == "run"){
             this.props.workstartcase(this.state.configuration);
@@ -165,7 +168,73 @@ export default class workview extends Component {
         }else{
             this.runview(this.state.configuration);
         }
+    }*/
+    buttonclick(i){
+        if(this.state.status == "run"){
+            switch(i){
+                case 0:
+                    this.props.workstartcase(this.state.configuration);
+                    return;
+                case 1:
+                    this.modview(this.state.configuration);
+                    return;
+                case 2:
+                    this.state.callbackDelete();
+                    return;
+                case 3:
+                    this.state.callbackTozero();
+                    return;
+                default:
+
+            }
+        }else if(this.state.status == "running"){
+            this.props.workstopcase(this.state.configuration);
+            switch(i){
+                case 0:
+                    this.props.workstopcase(this.state.configuration);
+                    return;
+                default:
+
+            }
+        }else if(this.state.status == "new"){
+            switch(i){
+                case 0:
+                    this.props.worksavenewcase(this.refs.Configurationview.getUpdatedValue());
+                    return;
+                case 1:
+                    this.back2brickview();
+                    return;
+                default:
+
+            }
+        }else{
+            switch(i){
+                case 0:
+                    this.props.worksavemodcase(this.refs.Configurationview.getUpdatedValue());
+                    return;
+                case 1:
+                    this.runview(this.state.configuration);
+                    return;
+                default:
+
+            }
+        }
     }
+    update_callback_tozero(callback){
+        this.setState({callbackTozero:callback})
+    }
+    update_callback_delete(callback){
+        this.setState({callbackDelete:callback})
+    }
+    handle_click_to_zero(){
+        //console.log("click");
+        this.state.callbackTozero();
+    }
+    handle_click_delete(){
+        this.state.callbackDelete();
+
+    }
+
     buttonremoveclick(){
         this.state.alarmremovecallback();
     }
@@ -174,7 +243,7 @@ export default class workview extends Component {
             <div style={{position:"relative",background:"#DDDDDD",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflowY:'hidden',overflowX:'hidden'}}>
                 <div style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:this.state.leftwidth,float: "left"}}>
                     <Alarmbar ref="Alarmbar" buttonclick={this._buttonremoveclick}/>
-                    <Buttonbar ref="Buttonbar" button1click={this._button1click} button2click={this._button2click}/>
+                    <Buttonbar ref="Buttonbar" buttonclick={this._buttonclick}/>
                 </div>
                 <div style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:this.state.rightwidth,float: "left"}}>
                     <Billboardview ref="Billboardview"/>

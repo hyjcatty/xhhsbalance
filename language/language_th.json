@@ -83,7 +83,9 @@
     "buttonbar":{
       "run_configure":{
         "button1":"开始",
-        "button2":"修改"
+        "button2":"修改",
+        "button3":"删除",
+        "button4":"清零"
       },
       "calibration_configure":{
         "button1":"清零",

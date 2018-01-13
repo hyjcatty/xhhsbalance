@@ -29,6 +29,7 @@ export default class sysconfview extends Component {
             configure:null,
             key:"sys_conf_key",
             key2:"sys_conf_input",
+            callbackSave:null
         }
         //this.keyboard_initialize();
     }
@@ -331,6 +332,14 @@ export default class sysconfview extends Component {
         }
         return config;
     }
+    update_callback_save(callback){
+        this.setState({callbackSave:callback})
+    }
+
+    handle_click_save(){
+        this.state.callbackSave();
+
+    }
     render() {
         let groups1 = [];
         let grougs1size=0;
@@ -462,15 +471,23 @@ export default class sysconfview extends Component {
         }
 
         return (
-            <div id='sysconfview'  style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflow:'scroll',overflowX:'hidden'}}>
-                <div className="container">
-                    <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
-                        {groups1}
-                    </div>
-                    <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
-                        {groups2}
+            <div style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflow:'hidden',overflowX:'hidden'}}>
+                <div style={{float: "left",position:"relative",width:((this.state.footheight-10)*1.6+10),height:this.state.height,borderRight:"solid 2px #dddddd"}}>
+                    <button  type="button" className="btn btn-warning btn-sm pull-right" style={{marginLeft:"5px",marginTop:"5px",height:(this.state.footheight-10)*1.6,width:(this.state.footheight-10)*1.6,display:this.state.hideSave}} disabled={this.state.disabled} onClick={this.handle_click_save.bind(this)}>
+                        <i className="fa fa-save" style={{fontSize:25}}> </i>
+                    </button>
+                </div>
+                <div id='sysconfview'   style={{float: "left",position:"relative",width:this.state.width-((this.state.footheight-10)*1.6+10),height:this.state.height,overflowY:"auto",overflowX:"hidden"}}>
+                    <div className="container" >
+                        <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
+                            {groups1}
+                        </div>
+                        <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
+                            {groups2}
+                        </div>
                     </div>
                 </div>
+
             </div>
         );
     }

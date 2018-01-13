@@ -21,17 +21,19 @@ export default class buttonbar extends Component {
             width:600,
             hide:"block",
             configuration:null,
-            bricksize:100,
-            marginsize:5,
+            buttonnumber:2,
+            brickwidth:100,
+            brickheight:100,
+            marginleft:5,
             margintop:5,
             status:0,
-            button1:"",
-            button2:"",
-            button2hide:"block",
+            button:["","","",""],
             language:{
                 "run_configure":{
                     "button1":"START",
-                    "button2":"MODIFY"
+                    "button2":"MODIFY",
+                    "button3":"DELETE",
+                    "button4":"ToZero"
                 },
                 "calibration_configure":{
                     "button1":"TO_ZERO",
@@ -60,38 +62,42 @@ export default class buttonbar extends Component {
         //console.log("button bar width:"+width+",height:"+height);
     }
     calculatesize(){
-        let size = (this.state.width);
-        let marginsize = size*0.1;
-        let bricksize = size-marginsize*2;
-        let margintop = (this.state.height-bricksize*2)/3
-        //console.log("bricksize:"+bricksize+",marginsize:"+marginsize);
-        this.setState({bricksize:bricksize,marginsize:marginsize,margintop:margintop});
+        let Bheight =(this.state.height/this.state.buttonnumber)*0.8;
+        let Bwidth  =(this.state.width)*0.8;
+        if(Bheight>Bwidth) Bheight=Bwidth;
+        let TopMargin = (this.state.height-Bheight*this.state.buttonnumber)/(this.state.buttonnumber+1);
+        let LeftMargin = this.state.width*0.1;
+        this.setState({brickwidth:Bwidth,brickheight:Bheight,marginleft:LeftMargin,margintop:TopMargin});
     }
     run_configure(){
-        this.showbutton2();
-        this.setState({button1:this.state.language.run_configure.button1,button2:this.state.language.run_configure.button2,status:0});
+        //this.showbutton2();
+        this.setState({button:[this.state.language.run_configure.button1,
+            this.state.language.run_configure.button2,
+            this.state.language.run_configure.button3,
+            this.state.language.run_configure.button4
+        ],status:0,buttonnumber:4},this.calculatesize);
+
     }
     calibration_configure(){
-        this.showbutton2();
-        this.setState({button1:this.state.language.calibration_configure.button1,button2:this.state.language.calibration_configure.button2,status:0});
+        //this.showbutton2();
+        this.setState({button:[this.state.language.calibration_configure.button1,
+            this.state.language.calibration_configure.button2
+        ],status:0,buttonnumber:2},this.calculatesize);
     }
     modify_configure(){
-        this.showbutton2();
-        this.setState({button1:this.state.language.modify_configure.button1,button2:this.state.language.modify_configure.button2,status:1});
+        this.setState({button:[this.state.language.modify_configure.button1,
+            this.state.language.modify_configure.button2
+        ],status:0,buttonnumber:2},this.calculatesize);
     }
     new_configure(){
-        this.showbutton2();
-        this.setState({button1:this.state.language.new_configure.button1,button2:this.state.language.new_configure.button2,status:1});
+        this.setState({button:[this.state.language.new_configure.button1,
+            this.state.language.new_configure.button2
+        ],status:0,buttonnumber:2},this.calculatesize);
     }
     running_configure(){
-        this.hidebutton2();
-        this.setState({button1:this.state.language.running_configure.button1,button2:this.state.language.running_configure.button2,status:1});
-    }
-    hidebutton2(){
-        this.setState({button2hide:"none"});
-    }
-    showbutton2(){
-        this.setState({button2hide:"block"});
+        this.setState({button:[this.state.language.running_configure.button1,
+            this.state.language.running_configure.button2
+        ],status:0,buttonnumber:1},this.calculatesize);
     }
     hide(){
         this.setState({hide:"none"});
@@ -99,36 +105,34 @@ export default class buttonbar extends Component {
     show(){
         this.setState({hide:"block"});
     }
-    handle_click1(){
-        this.props.button1click();
-    }
-    handle_click2(){
-        this.props.button2click();
+    handle_click(e){
+        let i = e.target.getAttribute('data-buttonnumber');
+        //console.log("button series :"+i);
+        if(i===null)return;
+        this.props.buttonclick(parseInt(i));
     }
     render() {
+        let buttonlist =[];
+        for(let i=0;i<this.state.buttonnumber;i++){
+            let temp =
+                <div key={"buttonkey"+i} style={{marginTop:this.state.margintop,marginLeft:this.state.marginleft,width:this.state.brickwidth,height:this.state.brickheight,float: "left",position:"relative"}}>
+                    <button type="button" className="btn" data-buttonnumber={''+(i)} style={{width:this.state.brickwidth,height:this.state.brickheight,verticalAlign:"middle"}} onClick={this.handle_click.bind(this)}>
+                        <i data-buttonnumber={''+(i)}>
+                            <a data-buttonnumber={''+(i)} style={{position:"relative",height:this.state.brickheight*0.3,display:'table-cell',verticalAlign:'middle'}}>
+                                <span data-buttonnumber={''+(i)} className="framelabel"  style={{fontSize:this.state.brickheight*0.2,marginLeft:0}}>
+                                    {this.state.button[i]}
+                                </span>
+                            </a>
+
+                        </i>
+                    </button>
+                </div>;
+            buttonlist.push(temp);
+        }
+
         return (
             <div style={{position:"relative",background:"#73839c",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflowY:'hidden',overflowX:'hidden'}}>
-                <div style={{marginTop:this.state.margintop,marginLeft:this.state.marginsize,width:this.state.bricksize,height:this.state.bricksize,float: "left",position:"relative"}}>
-                    <button type="button" className="btn" style={{height:this.state.bricksize,width:this.state.bricksize,verticalAlign:"middle"}} onClick={this.handle_click1.bind(this)}><i>
-                        <a style={{position:"relative",height:this.state.bricksize*0.3,display:'table-cell',verticalAlign:'middle'}}>
-                        <span className="framelabel"  style={{fontSize:this.state.bricksize*0.2,marginLeft:0}}>
-                            {this.state.button1}
-                        </span>
-                        </a>
-
-                    </i></button>
-                </div>
-
-                <div style={{marginTop:this.state.margintop,marginLeft:this.state.marginsize,width:this.state.bricksize,height:this.state.bricksize,float: "left",position:"relative",display:this.state.button2hide}}>
-                    <button type="button" className="btn" style={{height:this.state.bricksize,width:this.state.bricksize,verticalAlign:"middle"}} onClick={this.handle_click2.bind(this)}><i>
-                        <a style={{position:"relative",height:this.state.bricksize*0.3,display:'table-cell',verticalAlign:'middle'}}>
-                        <span className="framelabel"  style={{fontSize:this.state.bricksize*0.2,marginLeft:0}}>
-                            {this.state.button2}
-                        </span>
-                        </a>
-
-                    </i></button>
-                </div>
+                {buttonlist}
             </div>
         );
     }
