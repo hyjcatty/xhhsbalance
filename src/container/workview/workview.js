@@ -188,7 +188,7 @@ export default class workview extends Component {
 
             }
         }else if(this.state.status == "running"){
-            this.props.workstopcase(this.state.configuration);
+            //this.props.workstopcase(this.state.configuration);
             switch(i){
                 case 0:
                     this.props.workstopcase(this.state.configuration);
