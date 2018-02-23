@@ -731,7 +731,7 @@ function systemstart(){
     initializedrag("sysconfview");
     initializedrag("userview");
     updateclock();
-    $('#ExpiredConfirm').on('click',delete_configure);
+    $('#ExpiredConfirm').unbind('click').on('click',delete_configure);
 }
 
 //var footcallback_return= function(){
