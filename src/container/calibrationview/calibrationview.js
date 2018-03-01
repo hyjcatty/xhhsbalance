@@ -26,8 +26,8 @@ export default class calibrationview extends Component {
             disabled:"",
             running:false,
             language:{
-                buttontitlestart:"start",
-                buttontitlestop:"stop",
+                buttontitlestart:"Zero Calibration",
+                buttontitlestop:"Full Calibration",
                 titlestatic:"Static Calibration",
                 titledynamic:"Dynamic Calibration"
             }
@@ -138,7 +138,7 @@ export default class calibrationview extends Component {
                         </div>
                     </div>
                     <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
-                        <div className="tile-stats"  style={{marginTop:"15px"}}>
+                        <div className="tile-stats"  style={{marginTop:"15px",minHeight: "621.5px"}}>
                             <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.titledynamic}</div>
                             <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" >
                                 <button type="button" id="calibration_start" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.disabled} onClick={this.dynamic_action.bind(this)} >

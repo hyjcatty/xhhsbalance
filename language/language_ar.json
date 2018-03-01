@@ -21,8 +21,8 @@
     "pnotifytitle":"System version:"
   },
   "calibrationview":{
-    "buttontitlestart":"start",
-    "buttontitlestop":"stop",
+    "buttontitlestart":"Zero Calibration",
+    "buttontitlestop":"Full Calibration",
     "titlestatic":"Static Calibration",
     "titledynamic":"Dynamic Calibration",
     "calibrationunit":{

@@ -21,8 +21,8 @@
     "pnotifytitle":"当前系统版本:"
   },
   "calibrationview":{
-    "buttontitlestart":"开始",
-    "buttontitlestop":"停止",
+    "buttontitlestart":"零值校准",
+    "buttontitlestop":"满值校准",
     "titlestatic":"静态校准",
     "titledynamic":"动态校准",
     "calibrationunit":{
