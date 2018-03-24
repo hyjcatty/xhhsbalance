@@ -179,22 +179,34 @@ function builddebuginfo(){
 }
 function buildcalibrationzeroinfo(){
     var balance="1";
+    var random = GetRandomNum(50,125);
+    var debuginfo = "";
+    for(var i=0;i<random;i++){
+        debuginfo = debuginfo+"x"+i+" ";
+    }
     var ret = {
         action:"XH_High_Speed_Balance_calibration_zero_status",
         data:{
             balance:balance,
-            msg:parseFloat(GetRandomNum(0,500))/1000
+            msg:parseFloat(GetRandomNum(0,500))/1000,
+            debugmsg:debuginfo
         }
     }
     return JSON.stringify(ret);
 }
 function buildcalibrationweightinfo(){
     var balance="1";
+    var random = GetRandomNum(50,125);
+    var debuginfo = "";
+    for(var i=0;i<random;i++){
+        debuginfo = debuginfo+"x"+i+" ";
+    }
     var ret = {
         action:"XH_High_Speed_Balance_calibration_weight_status",
         data:{
             balance:balance,
-            msg:parseFloat(GetRandomNum(0,5000))
+            msg:parseFloat(GetRandomNum(0,5000)),
+            debugmsg:debuginfo
         }
     }
     return JSON.stringify(ret);

@@ -58,8 +58,8 @@ export default class calibrationview extends Component {
             this.refs['Light'+(i+1)].updatecallback(callbackzero,callbackcountweight);
         }
     }
-    update_balance_status(balanceNo,status,weight){
-        this.refs['Light'+(parseInt(balanceNo))].setstatus(status,weight);
+    update_balance_status(balanceNo,status,weight,msg){
+        this.refs['Light'+(parseInt(balanceNo))].setstatus(status,weight,msg);
     }
     update_dynamic_status(status){
             this.refs['dynamic'+(parseInt(status.balance))].update_status(status);

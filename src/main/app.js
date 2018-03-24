@@ -449,8 +449,8 @@ class App extends Component{
     update_light(light){
         this.refs.Workview.update_billboard_light(light);
     }
-    update_cali_status(balanceNo,status,weight){
-        this.refs.Calibrationview.update_balance_status(balanceNo,status,weight);
+    update_cali_status(balanceNo,status,weight,msg){
+        this.refs.Calibrationview.update_balance_status(balanceNo,status,weight,msg);
     }
     update_cali_dynamic_status(status){
         this.refs.Calibrationview.update_dynamic_status(status);
@@ -690,9 +690,9 @@ function initialize_mqtt(){
                 //app_handle.update_animateview_statistics(ret.data);
                 break;
             case "XH_High_Speed_Balance_calibration_zero_status":
-                app_handle.update_cali_status(ret.data.balance,1,ret.data.msg);break;
+                app_handle.update_cali_status(ret.data.balance,1,ret.data.msg,ret.data.debugmsg);break;
             case "XH_High_Speed_Balance_calibration_weight_status":
-                app_handle.update_cali_status(ret.data.balance,2,ret.data.msg);break;
+                app_handle.update_cali_status(ret.data.balance,2,ret.data.msg,ret.data.debugmsg);break;
             case "XH_High_Speed_Balance_calibration_dynamic_status":
                 app_handle.update_cali_dynamic_status(ret.data);break;
             default:

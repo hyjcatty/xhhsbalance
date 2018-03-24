@@ -33,6 +33,7 @@ export default class Calibrationunit extends Component {
             balanceNo:0,
             callbackzero:null,
             callbackcountweight:null,
+            debugmsg:"",
             language:{
                 "title":"#Balance:",
                 "statusempty":"keep empty",
@@ -77,12 +78,12 @@ export default class Calibrationunit extends Component {
             this.setState({lockdisabled:""});
         }
     }
-    setstatus(status,weight){
+    setstatus(status,weight,msg){
         if(this.state.lockdisabled == "disabled"){
             //if system is locked, we will not receive any update
             return;
         }
-        this.setState({status:status});
+        this.setState({status:status,debugmsg:msg});
         if(status == 1){
             this.setState({note:weight,disabled:"",colornote: "#9B59B6",colornotename:"PURPLE",blingnote:true});
         }else if(status == 2){
@@ -110,7 +111,7 @@ export default class Calibrationunit extends Component {
         if(this.state.blingcircle)  lightcircle1 = "btn btn-primary btn-sm  blingbling-"+this.state.colorcirclename;
         light.push(
             <div key="light" style={{width:"100%",float: "left",position:"relative",marginTop:this.state.width*0.00,display:'table'}}>
-                <div style={{marginTop:"100px",position:"relative",float:"left",width:"100%",display:'table'}}>
+                <div style={{marginTop:"10px",position:"relative",float:"left",width:"100%",display:'table'}}>
                     <h3 style={{width:"100%",fontSize:15,marginTop:"6px",marginLeft:5,marginBottom:"3px",textAlign:"center"}} className="pull-left">{this.state.title}</h3>
                     <div style={{width:"100%",float: "left",position:"relative",display:'table'}}>
 
@@ -131,7 +132,9 @@ export default class Calibrationunit extends Component {
                     </div>
                 </div>
                 <div className="clearfix"></div>
-
+                <div className="tile-stats"  style={{marginTop:"15px",height:"200px"}}>
+                    <a>{this.state.debugmsg}</a>
+                </div>
             </div>);
 
         return (
