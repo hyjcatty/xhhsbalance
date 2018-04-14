@@ -24,6 +24,7 @@ export default class calibrationview extends Component {
             key:"calibrationbutton",
             key2:"calibrationlight",
             disabled:"",
+            zeroorfull:false,
             running:false,
             language:{
                 buttontitlestart:"Zero Calibration",
@@ -33,6 +34,8 @@ export default class calibrationview extends Component {
             }
         }
         //this.keyboard_initialize();
+        this._calilockall=this.calilockall.bind(this);
+        this._calireleaseall=this.calireleaseall.bind(this);
     }
     update_language(language){
         this.setState({language:language});
@@ -52,6 +55,16 @@ export default class calibrationview extends Component {
             this.refs['Light'+(2*i)].initialize("right",width,footheight);
         }*/
 
+    }
+    calilockall(){
+        this.props.workcontrolhead(false);
+        this.props.workcontrolfoot(false,false,false);
+        this.lockbutton();
+    }
+    calireleaseall(){
+        this.props.workcontrolhead(true);
+        this.props.workcontrolfoot(false,true,false);
+        this.releasebutton();
     }
     update_callback(callbackzero,callbackcountweight){
         for(let i=0;i<1;i++){
@@ -74,6 +87,7 @@ export default class calibrationview extends Component {
         }
     }
     dynamic_action(){
+        /*
         if(this.state.running){
             this.props.calistopcase();
             this.setState({running:false});
@@ -87,7 +101,34 @@ export default class calibrationview extends Component {
             this.lockall(true);
             this.props.workcontrolhead(false);
             this.props.workcontrolfoot(false,false,false);
+        }*/
+        if(this.state.zeroorfull){
+            this.props.calistopcase();
+            this.setState({running:true});
+            this.lockall(true);
+            this.props.workcontrolhead(false);
+            this.props.workcontrolfoot(false,false,false);
+            this.lockbutton();
+        }else{
+            this.props.calistartcase();
+            this.setState({running:true});
+            this.lockall(true);
+            this.props.workcontrolhead(false);
+            this.props.workcontrolfoot(false,false,false);
+            this.lockbutton()
         }
+    }
+    zero_finish(){
+        this.setState({zeroorfull:true});
+        this.releasebutton();
+    }
+    full_finish(){
+        this.setState({zeroorfull:false});
+        this.setState({running:false});
+        this.lockall(false);
+        this.props.workcontrolhead(true);
+        this.props.workcontrolfoot(false,true,false);
+        this.releasebutton();
     }
     lockall(bool){
         for(let i=0;i<1;i++){
@@ -106,7 +147,10 @@ export default class calibrationview extends Component {
         for (let i = 1; i < 2; i++) {
             let key = "Light" + i;
             unitlist.push(<div key={key}>
-                <CaliUnit ref={key}/>
+                <CaliUnit ref={key}
+                          calilockall={this._calilockall}
+                          calireleaseall={this._calireleaseall}
+                />
             </div>);
         }
         let dynamiclist = [];
@@ -118,7 +162,8 @@ export default class calibrationview extends Component {
         }
 
         let title_info = this.state.language.buttontitlestart;
-        if(this.state.running) title_info= this.state.language.buttontitlestop;
+        //if(this.state.running) title_info= this.state.language.buttontitlestop;
+        if(this.state.zeroorfull) title_info= this.state.language.buttontitlestop;
         return (
             <div style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflow:'scroll',overflowX:'hidden'}}>
                 <div className="container">

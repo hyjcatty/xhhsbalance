@@ -84,7 +84,7 @@ export default class dynamiccalibrationunit extends Component {
         let color ="#000000";
         if(this.state.showlist.status) color="#227700";
         let param=[];
-        for(let i=1;i<this.state.showlist.value.length;i++){
+        for(let i=0;i<this.state.showlist.value.length;i++){
             param.push(
                 <div className="tile-stats" key={"keydynamic"+i} style={{borderStyle:"none none solid none",borderRadius:"0px"}}>
                     <h3 style={{paddingTop:10,color:"#000000",fontWeight:"bold"}}>{this.state.showlist.value[i].name}</h3>

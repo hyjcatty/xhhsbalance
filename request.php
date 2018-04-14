@@ -279,7 +279,55 @@ switch ($key){
                     'action'=>'XH_High_Speed_Balance_config_stop'
                 );
             }
+            $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
 
+            $mqtt->close();
+            //send mqtt msg end
+            $jsonencode = _encode($retval);
+            echo $jsonencode; break;
+    case "XH_Balance_Pause": //Use Wechat to login the Server, response is the userID in system.
+        /*
+         var body = {
+                        action:"pause" // or resume
+         };
+         var map={
+            action:"XH_Balance_Pause",
+            type:"query",
+            body: body,
+            user:"null"
+         };
+        * */
+            $body=$payload["body"];
+            $sta='true';
+            $retval=array(
+                'status'=>$sta,
+                'auth'=>'true',
+                'msg'=>'12345'
+            );
+            //send mqtt message
+            $action = $body["action"];
+
+            $server = "127.0.0.1";     // change if necessary
+            $port = 1883;                     // change if necessary
+            $username = "";                   // set your username
+            $password = "";                   // set your password
+            $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+            $mqtt = new phpMQTT($server, $port, $client_id);
+            if(!$mqtt->connect(true, NULL, $username, $password)) {
+                exit(1);
+            }
+            $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+            //$mqtt->subscribe($topics, 0);
+            $retval;
+            if($action == "pause"){
+                $retval=array(
+                    'action'=>'XH_High_Speed_Balance_config_pause'
+                );
+            }else{
+                $retval=array(
+                    'action'=>'XH_High_Speed_Balance_config_resume'
+                );
+            }
 
 
 
@@ -528,6 +576,7 @@ switch ($key){
             $retval=array(
                 'status'=>$sta,
                 'auth'=>'true',
+                'ret'=>$body,
                 'msg'=>'12345'
             );
 
@@ -547,6 +596,7 @@ switch ($key){
             filemod($body["name"],_encode($body));
                 $retval=array(
                     'status'=>$sta,
+                    'ret'=>$body,
                     'auth'=>'true',
                     'msg'=>'12345'
                 );
@@ -937,6 +987,46 @@ function flushUI(){
     $mqtt->close();
 }
 
+function runpause(){
+     $server = "127.0.0.1";     // change if necessary
+     $port = 1883;                     // change if necessary
+     $username = "";                   // set your username
+     $password = "";                   // set your password
+     $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+     $mqtt = new phpMQTT($server, $port, $client_id);
+     if(!$mqtt->connect(true, NULL, $username, $password)) {
+         exit(1);
+     }
+     $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+     //$mqtt->subscribe($topics, 0);
+     $retval=array(
+                        'action'=>'XH_High_Speed_Balance_pause_trigger'
+                    );
+
+     $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
+
+     $mqtt->close();
+}
+function runresume(){
+    $server = "127.0.0.1";     // change if necessary
+    $port = 1883;                     // change if necessary
+    $username = "";                   // set your username
+    $password = "";                   // set your password
+    $client_id = "MQTT_XH_High_Speed_Balance_PHP"; // make sure this is unique for connecting to sever - you could use uniqid()
+    $mqtt = new phpMQTT($server, $port, $client_id);
+    if(!$mqtt->connect(true, NULL, $username, $password)) {
+        exit(1);
+    }
+    $topics['MQTT_XH_High_Speed_Balance_PHP'] = array("qos" => 0, "function" => "procmsg");
+    //$mqtt->subscribe($topics, 0);
+    $retval=array(
+                       'action'=>'XH_High_Speed_Balance_resume_trigger'
+                   );
+
+    $mqtt->publish('MQTT_XH_High_Speed_Balance_HCU', _encode($retval));
+
+    $mqtt->close();
+}
 
 
 class phpMQTT {

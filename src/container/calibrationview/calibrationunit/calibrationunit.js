@@ -78,6 +78,7 @@ export default class Calibrationunit extends Component {
             this.setState({lockdisabled:""});
         }
     }
+
     setstatus(status,weight,msg){
         if(this.state.lockdisabled == "disabled"){
             //if system is locked, we will not receive any update
@@ -96,10 +97,12 @@ export default class Calibrationunit extends Component {
     }
     handle_click_back1(){
         this.state.callbackzero(this.state.balanceNo);
+        this.props.calilockall();
         //this.setstatus(1);
     }
     handle_click_back2(){
         this.state.callbackcountweight(this.state.balanceNo);
+        this.props.calireleaseall();
     }
     render() {
         let light=[];

@@ -4,6 +4,7 @@
   "app":{
     "modalhead":"警告",
     "modaltips":"确认删除配置",
+    "modaltips2":"确认关停当前产线配置",
     "modalconfirm":"确认",
     "modalcancel":"取消",
     "userunknown":"未登陆用户"
@@ -80,28 +81,32 @@
       "content2":"错误",
       "content3":"错误"
     },
-    "buttonbar":{
-      "run_configure":{
-        "button1":"开始",
-        "button2":"修改",
-        "button3":"删除",
-        "button4":"清零"
+    "buttonbar": {
+      "run_configure": {
+        "button1": "开始",
+        "button2": "修改",
+        "button3": "删除",
+        "button4": "清零"
       },
-      "calibration_configure":{
-        "button1":"清零",
-        "button2":"校准"
+      "calibration_configure": {
+        "button1": "清零",
+        "button2": "校准"
       },
-      "modify_configure":{
-        "button1":"保存",
-        "button2":"放弃"
+      "modify_configure": {
+        "button1": "保存",
+        "button2": "放弃"
       },
-      "new_configure":{
-        "button1":"保存",
-        "button2":"放弃"
+      "new_configure": {
+        "button1": "保存",
+        "button2": "放弃"
       },
-      "running_configure":{
-        "button1":"停止",
-        "button2":"停止"
+      "running_configure": {
+        "button1": "暂停",
+        "button2": "关停"
+      },
+      "pause_configure": {
+        "button1": "继续",
+        "button2": "关停"
       }
     },
     "configurationview":{
@@ -160,7 +165,7 @@
     "message3":"运行成功",
     "message4":"保存成功",
     "message5":"请确认是否删除配置：",
-    "message6":"",
+    "message6":"请确认是否关停产线配置：",
     "message7":"",
     "message8":"",
     "message9":"",

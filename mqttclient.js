@@ -11,6 +11,7 @@ var mqtt  = require('mqtt');
 //});
 
 var start = false;
+var pause = false;
 var calibration_start=false;
 
 var client  = mqtt.connect('mqtt://127.0.0.1',{
@@ -23,12 +24,14 @@ client.on('connect', function () {
     console.log('connected.....');
     client.subscribe('MQTT_XH_High_Speed_Balance_HCU');
 
+    /*
     setInterval(function(){
         if(!calibration_start) return;
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationdynamicinfo());
-    },6000);
+    },6000);*/
     setInterval(function(){
         if(!start) return;
+        if(pause) return;
         client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
     },600);
     setInterval(function(){
@@ -56,15 +59,22 @@ client.on('message', function (topic, message) {
          client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
 
          start = true;
-
+         pause = false;
      }else if(msg.action== "XH_High_Speed_Balance_config_stop"){
          start = false;
+         pause = false;
+     }else if(msg.action== "XH_High_Speed_Balance_config_pause"){
+         pause = true;
+     }else if(msg.action== "XH_High_Speed_Balance_config_resume"){
+         pause = false;
      }else if(msg.action== "XH_High_Speed_Balance_force_flush"){
          client.publish('MQTT_XH_High_Speed_Balance_UI', buildstatisticsinfo());
      }else if(msg.action == "XH_High_Speed_Balance_calibration_dynamic_start"){
-         calibration_start = true
+         calibration_start = true;
+         builddynamiccalibrationzeroinfo();
      }else if(msg.action == "XH_High_Speed_Balance_calibration_dynamic_stop"){
          calibration_start = false;
+         builddynamiccalibrationfullinfo();
      }else if(msg.action == "XH_High_Speed_Balance_calibration_zero_trigger"){
          client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationzeroinfo());
      }else if(msg.action == "XH_High_Speed_Balance_calibration_weight_trigger"){
@@ -116,7 +126,7 @@ function buildreportinfo(){
 
 
     var version = {
-        action:"XH_Double_Line_Balance_report_status",
+        action:"XH_High_Speed_Balance_report_status",
         data:msg
     }
     return JSON.stringify(version);
@@ -220,6 +230,20 @@ function buildcalibrationdynamicinfo(){
     for(var i=0;i<temp;i++){
         message = message+" x";
     }
+    var process = GetRandomNum(0,100);
+    var process_bar = "";
+    console.log("process ="+process+";grid="+Math.round(process/2));
+    var total = 50;
+    for(var i=0;i<Math.round(process/2);i++){
+        process_bar = process_bar+"█";
+    }
+    for(var i=0;i<(total-Math.round(process/2));i++){
+        process_bar = process_bar+"░";
+    }
+    process_bar = process_bar+"";
+    if(Math.round(process/2)<10) process_bar = process_bar +"  ";
+    if(Math.round(process/2)<100) process_bar = process_bar +"  ";
+    process_bar = process_bar +process+"%"
     var ret = {
         action:"XH_High_Speed_Balance_calibration_dynamic_status",
         data:{
@@ -227,7 +251,7 @@ function buildcalibrationdynamicinfo(){
                 status:status,
                 value:[{
                     name:'trynumber',
-                    value:GetRandomNum(0,50),
+                    value:process_bar
                 },{
                     name:"msg",
                     value:"ret msg:"+message
@@ -241,4 +265,31 @@ function GetRandomNum(Min,Max)
     var Range = Max - Min;
     var Rand = Math.random();
     return(Min + Math.round(Rand * Range));
+}
+
+function builddynamiccalibrationzeroinfo(){
+    let number = 6;
+    let intervalhandle = setInterval(function(){
+        client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationdynamicinfo());
+        number --;
+        if(number ===0){
+            clearInterval(intervalhandle);
+            client.publish('MQTT_XH_High_Speed_Balance_UI', JSON.stringify({
+                action:"XH_High_Speed_Balance_calibration_zero_finish",
+            }));
+        }
+    },6000);
+}
+function builddynamiccalibrationfullinfo(){
+    let number = 6;
+    let intervalhandle = setInterval(function(){
+        client.publish('MQTT_XH_High_Speed_Balance_UI', buildcalibrationdynamicinfo());
+        number --;
+        if(number ===0){
+            clearInterval(intervalhandle);
+            client.publish('MQTT_XH_High_Speed_Balance_UI', JSON.stringify({
+                action:"XH_High_Speed_Balance_calibration_full_finish",
+            }));
+        }
+    },6000);
 }
