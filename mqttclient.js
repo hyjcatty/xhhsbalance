@@ -44,6 +44,14 @@ client.on('connect', function () {
     setInterval(function(){
         client.publish('MQTT_XH_High_Speed_Balance_UI', builddebuginfo());
     },600000);
+    setInterval(function(){
+        var number = GetRandomNum(0,100);
+        if (number <50) return;
+        client.publish('MQTT_XH_High_Speed_Balance_UI', buildfetalinfo());
+        start = false;
+        pause = false;
+        calibration_start=false;
+    },20000);
     //client.publish('MQTT_TOPIC_UI_TO_HCU', 'Hello mqtt['+i+']');
 });
 
@@ -184,6 +192,26 @@ function builddebuginfo(){
     var version = {
         action:"XH_High_Speed_Balance_debug_status",
         data:msg
+    }
+    return JSON.stringify(version);
+}
+function buildfetalinfo(){
+    var number = GetRandomNum(1,50);
+    var msg = "return msg:";
+    for(var i=0;i<number;i++){
+        msg = msg+" x"+i;
+    }
+
+
+    var version = {
+        action:"XH_High_Speed_Balance_fetal_status",
+        data:{
+            errorcode:"Ox12345670",
+            errortime:"2018-5-5 23:23:23",
+            contract:"xiaohui@xiaohui.com",
+            tips:"",
+            message:msg
+        }
     }
     return JSON.stringify(version);
 }

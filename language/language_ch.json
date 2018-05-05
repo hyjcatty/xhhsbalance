@@ -46,6 +46,16 @@
     "sendbutton":"发送",
     "retmsg":"消息内容:"
   },
+  "syserrorview":{
+    "title":"系统错误",
+    "button":"系统重置",
+    "tips":"对不起，我们遇到一个严重的系统错误，请将此信息拍照后发送到联系邮箱，以获取进一步支持。",
+    "codetip":"错误号码:",
+    "timetip":"错误时间:",
+    "contacttip":"联系邮箱:",
+    "tipstip":"错误提示:",
+    "msgtip":"错误信息:"
+  },
   "exportview":{
     "consoletitle":"导出结果",
     "sendbutton":"导出",
@@ -175,7 +185,8 @@
     "title3":"系统调试",
     "title4":"系统设置",
     "title5":"请登录",
-    "title6":"日志导出"
+    "title6":"日志导出",
+    "title7":"系统错误"
 
 
   }

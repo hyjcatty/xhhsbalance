@@ -46,6 +46,16 @@
     "sendbutton":"send",
     "retmsg":"message return:"
   },
+  "syserrorview":{
+    "title":"Fetal Error",
+    "button":"reset",
+    "tips":"We are very sorry for the error. Please send the snapshot to contact for further support!",
+    "codetip":"Error Code:",
+    "timetip":"Time Stamp:",
+    "contacttip":"Support Mail:",
+    "tipstip":"Tips:",
+    "msgtip":"Detail info:"
+  },
   "exportview":{
     "consoletitle":"Export result",
     "sendbutton":"Export",
@@ -175,7 +185,8 @@
     "title3":"System debug",
     "title4":"System Configuration",
     "title5":"Please Login",
-    "title6":"Log Export"
+    "title6":"Log Export",
+    "title7":"Fetal Error"
 
   }
 
