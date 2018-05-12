@@ -95,7 +95,7 @@ export default class syserror extends Component {
                 <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" key={this.state.key+"output"}>
                     <div className="tile-stats" key={"debug_group_right"} style={{marginTop:"15px"}}>
                         <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.consoletitle}</div>
-                        <div style={{width:"100%",height:this.state.height*0.65,marginLeft:"15px",overflow:'hidden',overflowX:'hidden'}}>
+                        <div style={{width:"100%",height:this.state.height*0.65,paddingLeft:"15px",paddingRight:"15px",overflow:'hidden',overflowX:'hidden'}}>
                             {this.state.configure.message}
                         </div>
                     </div>
