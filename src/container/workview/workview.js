@@ -262,7 +262,9 @@ export default class workview extends Component {
     }
 
     buttonremoveclick(){
+        //this.props.workremovealarm();
         this.state.alarmremovecallback();
+        //add something here
     }
     render() {
         return (

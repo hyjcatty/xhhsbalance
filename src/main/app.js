@@ -57,6 +57,7 @@ class App extends Component{
             resetusercallback:null,
             listusercallback:null,
             changepasswordcallback:null,
+            removealarmback:null,
             language:{
                 "app":{
                     "modalhead":"Warning",
@@ -115,6 +116,7 @@ class App extends Component{
         this._workcontrolhead=this.headButtonShow.bind(this);
         this._worksavenewcase=this.savenewcase.bind(this);
         this._worksavemodcase=this.savemodcase.bind(this);
+        this._workremovealarm=this.removealarm.bind(this);
         this._newusercallback=this.newuser.bind(this);
         this._delusercallback=this.deluser.bind(this);
         this._resetusercallback=this.resetuser.bind(this);
@@ -185,6 +187,7 @@ class App extends Component{
     }
     initializeBrick(Bricklist,Baselist,callback,newchoicecallback){
         this.refs.Brickview.update_buttonlist(Bricklist,Baselist,callback,newchoicecallback);
+        this.refs.Calibrationview.update_buttonlist(Bricklist);
     }
     initializeLanguageview(Languagelist,callback){
         this.refs.Languageview.update_buttonlist(Languagelist,callback);
@@ -209,6 +212,9 @@ class App extends Component{
     }
     initializerunsave(newsave,modsave){
         this.setState({savenewback:newsave,savemodback:modsave});
+    }
+    initializeremovealarm(removealarm){
+        this.setState({removealarmback:removealarm});
     }
     initializeforceflash(forceflash){
         this.setState({forceflashback:forceflash});
@@ -546,11 +552,11 @@ class App extends Component{
     getuser(){
         return this.state.userid;
     }
-    calistart(){
-        this.state.caliruncallback(true);
+    calistart(conf){
+        this.state.caliruncallback(true,conf);
     }
-    calistop(){
-        this.state.caliruncallback(false);
+    calistop(conf){
+        this.state.caliruncallback(false,conf);
     }
     startcase(configure){
         this.state.runcallback(true,configure);
@@ -569,6 +575,9 @@ class App extends Component{
     }
     savemodcase(configure){
         this.state.savemodback(configure);
+    }
+    removealarm(){
+        this.state.removealarmback();
     }
     getsysconfset(){
         return this.refs.Sysconfview.getUpdatedValue();
@@ -635,7 +644,8 @@ class App extends Component{
                           workcontrolfoot={this._workcontrolfoot}
                           worksavenewcase={this._worksavenewcase}
                           worksavemodcase={this._worksavemodcase}
-                          workcontrolhead={this._workcontrolhead}/>
+                          workcontrolhead={this._workcontrolhead}
+                          workremovealarm={this._workremovealarm}/>
                 <Userview ref="Userview" newusercallback={this._newusercallback}
                           delusercallback={this._delusercallback}
                           resetusercallback={this._resetusercallback}
@@ -826,6 +836,8 @@ function systemstart(){
     app_handle.initializeWork(newviewabort,balance_clear_alarm);
     //app_handle.initializerunstop(xhbalancestartcase,xhbalancestartcase,balance_dynamic_cali);
     app_handle.initializerunstop(xhbalancestartcase,show_stopModule,balance_dynamic_cali,xhbalancepausecase);
+
+    app_handle.initializeremovealarm(removealarmfetch);
     app_handle.initializerunsave(xhbalancesavenewconf,xhbalancesavemodconf);
     app_handle.initializeforceflash(xhbalanceforceflashstatus);
     app_handle.initializeCalibration(balance_to_zero,balance_to_countweight);
@@ -1803,11 +1815,12 @@ function footcallback_save(){
     xhbalancesavesysconf(app_handle.getsysconfset());
 
 }
-function balance_dynamic_cali(bool){
+function balance_dynamic_cali(bool,conf){
     let action="stop";
     if(bool) action = "start";
     let body={
-        action:action
+        action:action,
+        configuration:conf
     }
     var map={
         action:"XH_Balance_cali_run",
@@ -2381,7 +2394,38 @@ function deluserfetchcallback(res){
     show_Module(language.message.message2);
     flushuserlistfetch();
 }
-
+function removealarmfetch(){
+    var map={
+        action:"XH_Balance_remove_alarm",
+        type:"mod",
+        lang:default_language,
+        user:null
+    };
+    fetch(request_head,
+        {
+            method:'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(map)
+        }).then(jsonParse)
+        .then(removealarmfetchcallback)
+        .catch( (error) => {
+            console.log('request error', error);
+            return { error };
+        });
+}
+function removealarmfetchcallback(res){
+    if(res.jsonResult.status == "false"){
+        alert("Fetal Error, system error while remove alarm!");
+        windows.close();
+    }
+    if(res.jsonResult.auth == "false"){
+        alert("Fetal Error, system error while remove alarm!");
+        windows.close();
+    }
+}
 function fetchmqtt(username){
     var map={
         action:"XH_Balance_mqtt_conf",

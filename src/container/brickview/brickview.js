@@ -160,7 +160,6 @@ export default class brickview extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-default" data-dismiss="modal">{this.state.language.modalcancel}</button>
-                                <button type="button" className="btn btn-primary" id="NewConfigureModuleConfirm" >{this.state.language.modalconfirm}</button>
                             </div>
                         </div>
                     </div>

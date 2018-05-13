@@ -11,6 +11,7 @@ import '../../../resource/css/font-awesome.min.css';
 import './calibrationview.css';
 import CaliUnit from './calibrationunit/calibrationunit.js';
 import DynamicUnit from './dynamiccalibrationunit/dynamiccalibrationunit.js';
+import Smallbrickbutton from '../brickview/smallbrickbutton/smallbrickbutton';
 
 
 export default class calibrationview extends Component {
@@ -20,22 +21,33 @@ export default class calibrationview extends Component {
             height:700,
             width:600,
             footheight:100,
+            bricksize:100,
+            marginsize:5,
             hide:"block",
             key:"calibrationbutton",
             key2:"calibrationlight",
             disabled:"",
             zeroorfull:false,
             running:false,
+            configuration:null,
+            buttonlist:[],
+            configurationname:"--",
+            selectdisable:"",
             language:{
                 buttontitlestart:"Zero Calibration",
                 buttontitlestop:"Full Calibration",
                 titlestatic:"Static Calibration",
-                titledynamic:"Dynamic Calibration"
+                titledynamic:"Dynamic Calibration",
+                modaltitle:"Please select a configuration",
+                tipstitle:"Current",
+                modalcancel:"Cancel",
+                buttonselect:"Select Conf"
             }
         }
         //this.keyboard_initialize();
         this._calilockall=this.calilockall.bind(this);
         this._calireleaseall=this.calireleaseall.bind(this);
+        this._smalliconclick=this.choiceconfiguration.bind(this);
     }
     update_language(language){
         this.setState({language:language});
@@ -46,8 +58,14 @@ export default class calibrationview extends Component {
             this.refs['dynamic'+(i+1)].updatelanguage(language.dynamiccalibrationunit);
         }
     }
+    update_buttonlist(buttonlist){
+        this.setState({buttonlist:buttonlist},this.updateprop);
+    }
     update_size(width,height,footheight){
-        this.setState({height:height,width:width,footheight:footheight});
+        let size = (width-50)/4;
+        let marginsize = size*0.05;
+        let bricksize = size-marginsize*2;
+        this.setState({height:height,width:width,footheight:footheight,marginsize:marginsize,bricksize:bricksize});
         this.refs['Light1'].initialize("left",width,footheight);
         /*
         for(let i=1;i<9;i++){
@@ -55,6 +73,12 @@ export default class calibrationview extends Component {
             this.refs['Light'+(2*i)].initialize("right",width,footheight);
         }*/
 
+    }
+    updateprop(){
+        for(let i=0;i<this.state.buttonlist.length;i++) {
+            this.refs["selectconfbutton"+ i].updateprop(this.state.buttonlist[i],"configure",this.state.bricksize);
+            //console.log(this.state.Framelist[i]);
+        }
     }
     calilockall(){
         this.props.workcontrolhead(false);
@@ -78,7 +102,8 @@ export default class calibrationview extends Component {
             this.refs['dynamic'+(parseInt(status.balance))].update_status(status);
     }
     hide(){
-        this.setState({hide:"none"});
+        this.setState({hide:"none",configuration:null,configurationname:"--"});
+
     }
     show(){
         this.setState({hide:"block"});
@@ -103,20 +128,21 @@ export default class calibrationview extends Component {
             this.props.workcontrolfoot(false,false,false);
         }*/
         if(this.state.zeroorfull){
-            this.props.calistopcase();
+            this.props.calistopcase(this.state.configuration);
             this.setState({running:true});
             this.lockall(true);
             this.props.workcontrolhead(false);
             this.props.workcontrolfoot(false,false,false);
             this.lockbutton();
         }else{
-            this.props.calistartcase();
+            this.props.calistartcase(this.state.configuration);
             this.setState({running:true});
             this.lockall(true);
             this.props.workcontrolhead(false);
             this.props.workcontrolfoot(false,false,false);
             this.lockbutton()
         }
+        this.setState({selectdisable:"disabled"});
     }
     zero_finish(){
         this.setState({zeroorfull:true});
@@ -129,6 +155,7 @@ export default class calibrationview extends Component {
         this.props.workcontrolhead(true);
         this.props.workcontrolfoot(false,true,false);
         this.releasebutton();
+        this.setState({selectdisable:""});
     }
     lockall(bool){
         for(let i=0;i<1;i++){
@@ -138,6 +165,16 @@ export default class calibrationview extends Component {
     lockbutton(){
         this.setState({disabled:"disabled"});
     }
+    choiceconfiguration(configuration,type){
+        this.setState({configuration:configuration,configurationname:configuration.name});
+        //HYJ: need to dismiss the module here
+
+        $('#SelectConfigureModel').modal('hide');
+    }
+    showmodule(){
+        $('#SelectConfigureModel').modal('show');
+    }
+
     releasebutton(){
         this.setState({disabled:""})
     }
@@ -164,6 +201,20 @@ export default class calibrationview extends Component {
         let title_info = this.state.language.buttontitlestart;
         //if(this.state.running) title_info= this.state.language.buttontitlestop;
         if(this.state.zeroorfull) title_info= this.state.language.buttontitlestop;
+
+        let conficons=[];
+        for(let i=0;i<this.state.buttonlist.length;i++){
+            let tempkey = "confbutton"+i;
+            let icon = "./svg/"+this.state.buttonlist[i].icon;
+            conficons.push(
+                <div key={"selectconfbutton"+i} style={{marginTop:this.state.marginsize/2,marginLeft:this.state.marginsize/2,marginRight:this.state.marginsize/2,marginBottom:this.state.marginsize/2,width:this.state.bricksize/2,height:this.state.bricksize/2,float: "left",position:"relative"}}>
+                    <Smallbrickbutton  ref={"selectconfbutton"+i} smalliconclick={this._smalliconclick}/>
+
+                </div>
+            );
+        }
+        let button_display = "none";
+        if(this.state.configuration!= null)button_display = "block";
         return (
             <div style={{position:"relative",background:"#FFFFFF",height:this.state.height,maxHeight:this.state.height,width:'100%',display:this.state.hide,overflow:'scroll',overflowX:'hidden'}}>
                 <div className="container">
@@ -186,6 +237,12 @@ export default class calibrationview extends Component {
                         <div className="tile-stats"  style={{marginTop:"15px",minHeight: "621.5px"}}>
                             <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.titledynamic}</div>
                             <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" >
+                                <button type="button" id="calibration_select" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.selectdisable} onClick={this.showmodule.bind(this)} >
+                                    {this.state.language.buttonselect}
+                                </button>
+                                <label>{this.state.language.tipstitle+":"+this.state.configurationname}</label>
+                            </div>
+                            <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" style={{display:button_display}}>
                                 <button type="button" id="calibration_start" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.disabled} onClick={this.dynamic_action.bind(this)} >
                                     {title_info}
                                 </button>
@@ -193,6 +250,27 @@ export default class calibrationview extends Component {
                             </div>
                         </div>
 
+                    </div>
+                </div>
+                <div className="modal fade" id="SelectConfigureModel" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" style={{width:'100%'}}>
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 className="modal-title" >{this.state.language.modaltitle}</h4>
+                            </div>
+                            <div id="SelectConfigureModelContentBody" className="modal-body" style={{height:this.state.height*0.75,maxHeight:this.state.height*0.75,overflow:"scroll",overflowX:"hidden"}}>
+
+                                <div className="col-md-12">
+                                    <div style={{position:"relative",background:"#FFFFFF",width:'100%',display:this.state.hide}}>
+                                        {conficons}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">{this.state.language.modalcancel}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

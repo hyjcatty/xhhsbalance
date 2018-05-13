@@ -26,6 +26,10 @@
     "buttontitlestop":"Full Calibration",
     "titlestatic":"Static Calibration",
     "titledynamic":"Dynamic Calibration",
+    "modaltitle":"Please select a configuration",
+    "tipstitle":"Current",
+    "modalcancel":"Cancel",
+    "buttonselect":"Select Conf",
     "calibrationunit":{
       "title":"#Balance:",
       "statusempty":"keep empty",

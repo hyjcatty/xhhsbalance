@@ -26,6 +26,10 @@
     "buttontitlestop":"满值校准",
     "titlestatic":"静态校准",
     "titledynamic":"动态校准",
+    "modaltitle":"请选择一个产品",
+    "tipstitle":"当前配置",
+    "modalcancel":"取消",
+    "buttonselect":"产品选择",
     "calibrationunit":{
       "title":"#秤台:",
       "statusempty":"清空秤台",
