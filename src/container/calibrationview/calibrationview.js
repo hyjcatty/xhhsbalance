@@ -236,16 +236,19 @@ export default class calibrationview extends Component {
                     <div className="col-xs-6 col-md-6 col-sm-6 col-lg-6">
                         <div className="tile-stats"  style={{marginTop:"15px",minHeight: "621.5px"}}>
                             <div key="statuspanel" className="count" style={{fontSize:24}}>{this.state.language.titledynamic}</div>
-                            <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" >
-                                <button type="button" id="calibration_select" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.selectdisable} onClick={this.showmodule.bind(this)} >
+                            <div className="col-xs-12 col-md-8 col-sm-8 col-lg-8" >
+                                <button type="button" id="calibration_select" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",height:"50px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.selectdisable} onClick={this.showmodule.bind(this)} >
                                     {this.state.language.buttonselect}
                                 </button>
                                 <label>{this.state.language.tipstitle+":"+this.state.configurationname}</label>
                             </div>
-                            <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" style={{display:button_display}}>
-                                <button type="button" id="calibration_start" data-loading-text="Loading..." className="btn btn-primary" autoComplete="off" style={{minWidth: "150px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.disabled} onClick={this.dynamic_action.bind(this)} >
+                            <div className="col-xs-12 col-md-4 col-sm-4 col-lg-4" style={{display:button_display}}>
+                                <button type="button" id="calibration_start" data-loading-text="Loading..." className="btn btn-primary pull-right" autoComplete="off" style={{minWidth: "150px",height:"50px",color:"#ffffff",fontWeight:700,background:"#000000"}} disabled={this.state.disabled} onClick={this.dynamic_action.bind(this)} >
                                     {title_info}
                                 </button>
+                            </div>
+                            <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12" style={{display:button_display}}>
+
                                 {dynamiclist}
                             </div>
                         </div>
