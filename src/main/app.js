@@ -268,6 +268,9 @@ class App extends Component{
         //console.log(this.state.language);
         this.tipsinfo("");
     }
+    hideallmodal(){
+        $('.modal').modal('hide') ;
+    }
     loginview(){
         this.removeuser();
         this.refs.Userview.hide();
@@ -446,6 +449,7 @@ class App extends Component{
         this.footButtonShowAssistant(false,false,false);
         this.footButtonShow(false,true,false);
         this.tipsinfo(this.state.language.message.title7);
+        this.hideallmodal();
     }
     exportview(){
         this.refs.Userview.hide();
