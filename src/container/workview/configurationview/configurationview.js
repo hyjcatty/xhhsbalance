@@ -393,8 +393,8 @@ export default class configurationview extends Component {
             for(let j=0;j<this.state.configuration.parameter.groups[i].list.length;j++){
                 if(this.state.configuration.parameter.groups[i].list[j].max!==""){
                     let contentline = "["+this.state.configuration.parameter.groups[i].list[j].min+"->"+this.state.configuration.parameter.groups[i].list[j].max+"]:"+this.state.configuration.parameter.groups[i].list[j].note;
-                    content.push(<div className="count" style={{fontSize:20,marginTop:15,verticalAlign:'bottom'}} key={this.state.key2+i+"p"+j+"1"}>{this.state.configuration.parameter.groups[i].list[j].paraname}</div>);
-                    content.push(<h3 style={{fontSize:14,marginRight:5}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>);
+                    content.push(<div className="count" style={{fontSize:20,marginTop:15,verticalAlign:'bottom',color:"#000000"}} key={this.state.key2+i+"p"+j+"1"}>{this.state.configuration.parameter.groups[i].list[j].paraname}</div>);
+                    content.push(<h3 style={{fontSize:14,marginRight:5,color:"#000000"}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>);
                     content.push(<input type="text" className="form-control configure_input" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"input"} id={"Para_G"+i+"P"+j+"_input"} data-group={i} data-parameter={j} value={this.state.configuration.parameter.groups[i].list[j].value} onChange={this.handleChange} onBlur={this.handleBlur} data-min={this.state.configuration.parameter.groups[i].list[j].min} data-max={this.state.configuration.parameter.groups[i].list[j].max}/>);
                 }else{
                     this.state.configuration.parameter.groups[i].list[j].defaultvalue = this.state.configuration.parameter.groups[i].list[j].items[parseInt(this.state.configuration.parameter.groups[i].list[j].value)];
@@ -535,7 +535,7 @@ export default class configurationview extends Component {
                     <div className="clearfix"></div>
                     <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12 " >
                         <div className="col-xs-12 col-md-12 col-sm-12 col-lg-12 " >
-                            <h4>{this.state.language.detailparameter}</h4>
+                            <h4 style={{color:"#000000",fontWeight:900}}>{this.state.language.detailparameter}</h4>
                         </div>
                         <div className="col-xs-3 col-md-3 col-sm-3 col-lg-3">
                             <ul className="nav nav-tabs tabs-left">
