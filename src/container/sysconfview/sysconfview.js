@@ -402,7 +402,11 @@ export default class sysconfview extends Component {
                         let choice_items = [];
                         this.state.configure.parameter.groups[i].list[j].defaultvalue = this.state.configure.parameter.groups[i].list[j].items[parseInt(this.state.configure.parameter.groups[i].list[j].value)];
                         for(let k=0;k<this.state.configure.parameter.groups[i].list[j].items.length;k++){
-                            choice_items.push(<option value={this.state.configure.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configure.parameter.groups[i].list[j].items[k]}</option>);
+                            if(k === parseInt(this.state.configure.parameter.groups[i].list[j].defaultvalue))
+                                choice_items.push(<option value={this.state.configure.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k} selected="selected">{this.state.configure.parameter.groups[i].list[j].items[k]}</option>);
+                            else
+                                choice_items.push(<option value={this.state.configure.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configure.parameter.groups[i].list[j].items[k]}</option>);
+
 
                         }
                         param.push(

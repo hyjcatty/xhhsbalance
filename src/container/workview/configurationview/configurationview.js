@@ -404,14 +404,14 @@ export default class configurationview extends Component {
                     content.push(<h3 style={{fontSize:14,marginRight:5,color:"#000000",fontWeight:400}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>);
                     let choice_items = [];
                     for(let k=0;k<this.state.configuration.parameter.groups[i].list[j].items.length;k++){
-                        /*
-                        if(this.state.configuration.parameter.groups[i].list[j].value === this.state.configuration.parameter.groups[i].list[j].items[k]){
+
+                        if(parseInt(this.state.configuration.parameter.groups[i].list[j].defaultvalue) === k){
                             choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} selected="selected" key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
 
                         }else{
                             choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
-                        }*/
-                        choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
+                        }
+                        //choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
 
                     }
                     content.push(<select className="form-control configure_choice" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"Choice"} id={"Para_G"+i+"P"+j+"_Choice"} data-group={i} data-parameter={j} onChange={this.handleChange}
