@@ -47,13 +47,9 @@ export default class configurationview extends Component {
     }
     update_size(width,height){
         this.setState({height:height,width:width});
-        //console.log("configurationview width:"+width+",height:"+height);
-
-
     }
     update_iconlist(iconlist){
         this.setState({iconlist:iconlist});
-
     }
     update_sub_props(){
         for(let i=0;i<this.state.iconlist.length;i++){
@@ -65,14 +61,12 @@ export default class configurationview extends Component {
     }
     hide(){
         this.setState({hide:"none"});
-        //this.switchery_distory();
     }
     show(){
         this.setState({hide:"block"},this.handdrag);
 
     }
     handdrag(){
-
         this.state.drag("configurationview");
         this.state.drag("iconselectview");
     }
@@ -229,7 +223,6 @@ export default class configurationview extends Component {
                         keyboard.$preview[0].select();
                     },
                     validate: function(e, key, el) {
-
                         let max = e.$el.attr("data-max");
                         let min = e.$el.attr("data-min");
                         if(parseFloat(key)>parseFloat(max)){
@@ -289,8 +282,6 @@ export default class configurationview extends Component {
         }
     }
     componentDidMount(){
-        //this.keyboard_initialize();
-
     }
     componentDidUpdate(){
         this.switchery_initialize();
@@ -303,10 +294,8 @@ export default class configurationview extends Component {
             $("#ConfigureName_Input").focus();
             return "";
         }else if(name !== ""){
-
             output.name=name;
         }
-
         $('.configure_input').each(function(){
             let group_sequence = $(this).attr("data-group");
             let para_sequence = $(this).attr("data-parameter");
@@ -330,26 +319,35 @@ export default class configurationview extends Component {
         }
         return output;
     }
+    deepCopy(o) {
+        if (o instanceof Array) {
+            var n = [];
+            for (var i = 0; i < o.length; ++i) {
+                n[i] = this.deepCopy(o[i]);
+            }
+            return n;
+        } else if (o instanceof Function) {
+            var n = new Function("return " + o.toString())();
+            return n
+        } else if (o instanceof Object) {
+            var n = {}
+            for (var i in o) {
+                n[i] = this.deepCopy(o[i]);
+            }
+            return n;
+        } else {
+            return o;
+        }
+    }
     handleChange(e){
+        let change_value = e.target.value;
+        let group_id= parseInt(e.target.getAttribute('data-group'));
+        let parameter_id= parseInt(e.target.getAttribute('data-parameter'));
+        let new_state = this.deepCopy(this.state.configuration);
+        new_state.parameter.groups[group_id].list[parameter_id].value=change_value;
+        this.setState({configuration:new_state});
     }
     handleChangecheck(e){
-        /*
-        for(let i=0;i<16;i++){
-            //console.log($("#Configure_Balance_"+i));
-            console.log("Configure_Balance_"+i+":"+$("#Configure_Balance_"+i).is(":checked"));
-            //this.state.configuration.parameter.preemption[i]=$("#Configure_Balance_"+i).is(":checked");
-        }
-        $("#Configure_Balance_1").prop("checked",true);
-
-        for(let i=0;i<16;i++){
-            //console.log($("#Configure_Balance_"+i));
-            console.log("Configure_Balance_"+i+":"+$("#Configure_Balance_"+i).is(":checked"));
-            //this.state.configuration.parameter.preemption[i]=$("#Configure_Balance_"+i).is(":checked");
-        }*/
-        /*
-        let handleid = e.currentTarget.getAttribute("id");
-        console.log(handleid);
-        $("#"+handleid).checked=!($("#"+handleid).checked);*/
     }
     handleBlur(e){/*
         let handleid = e.currentTarget.getAttribute("id");
@@ -395,7 +393,7 @@ export default class configurationview extends Component {
                     let contentline = "["+this.state.configuration.parameter.groups[i].list[j].min+"->"+this.state.configuration.parameter.groups[i].list[j].max+"]:"+this.state.configuration.parameter.groups[i].list[j].note;
                     content.push(<div className="count" style={{fontSize:20,marginTop:15,verticalAlign:'bottom',color:"#000000",fontWeight:900}} key={this.state.key2+i+"p"+j+"1"}>{this.state.configuration.parameter.groups[i].list[j].paraname}</div>);
                     content.push(<h3 style={{fontSize:14,marginRight:5,color:"#000000",fontWeight:400}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>);
-                    content.push(<input type="text" className="form-control configure_input" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"input"} id={"Para_G"+i+"P"+j+"_input"} data-group={i} data-parameter={j} value={this.state.configuration.parameter.groups[i].list[j].value} onChange={this.handleChange} onBlur={this.handleBlur} data-min={this.state.configuration.parameter.groups[i].list[j].min} data-max={this.state.configuration.parameter.groups[i].list[j].max}/>);
+                    content.push(<input type="text" className="form-control configure_input" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"input"} id={"Para_G"+i+"P"+j+"_input"} data-group={i} data-parameter={j} value={this.state.configuration.parameter.groups[i].list[j].value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur} data-min={this.state.configuration.parameter.groups[i].list[j].min} data-max={this.state.configuration.parameter.groups[i].list[j].max}/>);
                 }else{
                     this.state.configuration.parameter.groups[i].list[j].defaultvalue = this.state.configuration.parameter.groups[i].list[j].items[parseInt(this.state.configuration.parameter.groups[i].list[j].value)];
 
@@ -404,18 +402,20 @@ export default class configurationview extends Component {
                     content.push(<h3 style={{fontSize:14,marginRight:5,color:"#000000",fontWeight:400}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>);
                     let choice_items = [];
                     for(let k=0;k<this.state.configuration.parameter.groups[i].list[j].items.length;k++){
-
-                        if(parseInt(this.state.configuration.parameter.groups[i].list[j].defaultvalue) === k){
+                        /*
+                        console.log("Default value is:"+this.state.configuration.parameter.groups[i].list[j].value);
+                        if(parseInt(this.state.configuration.parameter.groups[i].list[j].value) === k){
                             choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} selected="selected" key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
-
+                            console.log("Default value set");
                         }else{
                             choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
-                        }
-                        //choice_items.push(<option value={this.state.configuration.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
+                        }*/
+                        choice_items.push(<option value={k+""} key={"choice_item_"+i+"_"+j+"_"+k}>{this.state.configuration.parameter.groups[i].list[j].items[k]}</option>);
 
                     }
-                    content.push(<select className="form-control configure_choice" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"Choice"} id={"Para_G"+i+"P"+j+"_Choice"} data-group={i} data-parameter={j} onChange={this.handleChange}
-                                         defaultValue={this.state.configuration.parameter.groups[i].list[j].defaultvalue} >{choice_items}</select>);
+                    content.push(<select className="form-control configure_choice" placeholder="CONFIG Value" aria-describedby="basic-addon1" key={this.state.key2+"G"+i+"P"+j+"Choice"} id={"Para_G"+i+"P"+j+"_Choice"} data-group={i} data-parameter={j}
+                                         onChange={this.handleChange.bind(this)}
+                                         value={this.state.configuration.parameter.groups[i].list[j].value}>{choice_items}</select>);
 
                 }
 
