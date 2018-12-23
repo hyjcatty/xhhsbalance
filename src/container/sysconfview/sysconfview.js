@@ -55,13 +55,41 @@ export default class sysconfview extends Component {
         this.switchery_initialize();
         this.keyboard_initialize();
     }
-    handleChange(){
-
+    deepCopy(o) {
+        if (o instanceof Array) {
+            var n = [];
+            for (var i = 0; i < o.length; ++i) {
+                n[i] = this.deepCopy(o[i]);
+            }
+            return n;
+        } else if (o instanceof Function) {
+            var n = new Function("return " + o.toString())();
+            return n
+        } else if (o instanceof Object) {
+            var n = {}
+            for (var i in o) {
+                n[i] = this.deepCopy(o[i]);
+            }
+            return n;
+        } else {
+            return o;
+        }
+    }
+    handleChange(e){
+        let change_value = e.target.value;
+        let group_id= parseInt(e.target.getAttribute('data-group'));
+        let parameter_id= parseInt(e.target.getAttribute('data-parameter'));
+        let new_state = this.deepCopy(this.state.configuration);
+        new_state.parameter.groups[group_id].list[parameter_id].value=change_value;
+        this.setState({configuration:new_state});
     }
     handleBlur(){
 
     }
     handleSave(){
+
+    }
+    handleChangecheck(){
 
     }
     switchery_initialize(){
@@ -359,7 +387,7 @@ export default class sysconfview extends Component {
                                     <span className="input-group-addon"  style={{minWidth: "100px",fontSize:"12px"}}>{this.state.configure.parameter.groups[i].list[j].paraname+":"}</span>
                                     <input type="text" className={className} placeholder="CONFIG Value" aria-describedby="basic-addon1"
                                            key={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} data-group={i} data-parameter={j}
-                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange} onBlur={this.handleBlur}
+                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)}
                                            data-min={this.state.configure.parameter.groups[i].list[j].min} data-max={this.state.configure.parameter.groups[i].list[j].max}/>
                                 </div>
                                 <h3 style={{fontSize:15,marginRight:5,color:"#333"}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>
@@ -374,7 +402,7 @@ export default class sysconfview extends Component {
                                     <span className="input-group-addon" style={{minWidth: "100px",fontSize:"12px"}}>{this.state.configure.parameter.groups[i].list[j].paraname+":"}</span>
                                     <input type="text" className={className} placeholder="CONFIG Value" aria-describedby="basic-addon1"
                                            key={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} data-group={i} data-parameter={j}
-                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange} onBlur={this.handleBlur}
+                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)}
                                            data-min={this.state.configure.parameter.groups[i].list[j].min} data-max={this.state.configure.parameter.groups[i].list[j].max}/>
                                 </div>
                                 <h3 style={{fontSize:15,marginRight:5,color:"#333"}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>
@@ -390,7 +418,7 @@ export default class sysconfview extends Component {
                                     <span className="input-group-addon"  style={{minWidth: "100px",fontSize:"12px"}}>{this.state.configure.parameter.groups[i].list[j].paraname+":"}</span>
                                     <input type="text" className={className} placeholder="CONFIG Value" aria-describedby="basic-addon1"
                                            key={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} data-group={i} data-parameter={j}
-                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange} onBlur={this.handleBlur}
+                                           value={this.state.configure.parameter.groups[i].list[j].value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)}
                                            data-min={this.state.configure.parameter.groups[i].list[j].min} data-max={this.state.configure.parameter.groups[i].list[j].max}/>
                                 </div>
                                 <h3 style={{fontSize:15,marginRight:5,color:"#333"}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>
@@ -400,7 +428,7 @@ export default class sysconfview extends Component {
                         let contentline = this.state.configure.parameter.groups[i].list[j].note;
                         let className="form-control "+"sys_conf_choice";
                         let choice_items = [];
-                        this.state.configure.parameter.groups[i].list[j].value = this.state.configure.parameter.groups[i].list[j].items[parseInt(this.state.configure.parameter.groups[i].list[j].value)];
+                        //this.state.configure.parameter.groups[i].list[j].value = this.state.configure.parameter.groups[i].list[j].items[parseInt(this.state.configure.parameter.groups[i].list[j].value)];
                         for(let k=0;k<this.state.configure.parameter.groups[i].list[j].items.length;k++){
                             /*if(k === parseInt(this.state.configure.parameter.groups[i].list[j].value))
                                 choice_items.push(<option value={this.state.configure.parameter.groups[i].list[j].items[k]} key={"choice_item_"+i+"_"+j+"_"+k} selected="selected">{this.state.configure.parameter.groups[i].list[j].items[k]}</option>);
@@ -415,8 +443,8 @@ export default class sysconfview extends Component {
                                     <span className="input-group-addon"  style={{minWidth: "100px",fontSize:"12px"}}>{this.state.configure.parameter.groups[i].list[j].paraname+":"}</span>
                                     <select className={className} placeholder="CONFIG Value" aria-describedby="basic-addon1"
                                             key={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} data-group={i} data-parameter={j}
-                                            onChange={this.handleChange} onBlur={this.handleBlur}
-                                            defaultValue={this.state.configure.parameter.groups[i].list[j].value} >{choice_items}</select>
+                                            onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)}
+                                            value={this.state.configure.parameter.groups[i].list[j].value} >{choice_items}</select>
                                 </div>
                                 <h3 style={{fontSize:15,marginRight:5,color:"#333"}}  key={this.state.key2+i+"p"+j+"2"}>{contentline}</h3>
                             </div>);
@@ -431,7 +459,7 @@ export default class sysconfview extends Component {
                                 <div>
                                 <label className="sys-conf-checkbox-label" style={{fontSize: "16px",color:"#555"}}>
                                     {this.state.configure.parameter.groups[i].list[j].paraname+":"}&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="checkbox" id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} className="js-switch sys_conf_checkbox" defaultChecked="checked" onChange={this.handleChangecheck} data-switchery="true" value="on"/>
+                                    <input type="checkbox" id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} className="js-switch sys_conf_checkbox" defaultChecked="checked" onChange={this.handleChangecheck.bind(this)} data-switchery="true" value="on"/>
                                 </label>
                             </div></div>;
                             param.push(temp);
@@ -440,7 +468,7 @@ export default class sysconfview extends Component {
                                 <div>
                                 <label className="sys-conf-checkbox-label" style={{fontSize: "16px",color:"#555"}}>
                                     {this.state.configure.parameter.groups[i].list[j].paraname+":"}&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="checkbox" id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} className="js-switch sys_conf_checkbox" onChange={this.handleChangecheck} data-switchery="true" value="on"/>
+                                    <input type="checkbox" id={this.state.key2+"G"+i+"P"+j+this.state.configure.parameter.groups[i].list[j].type} className="js-switch sys_conf_checkbox" onChange={this.handleChangecheck.bind(this)} data-switchery="true" value="on"/>
                                 </label>
                             </div></div>;
                             param.push(temp);
