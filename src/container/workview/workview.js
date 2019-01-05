@@ -219,6 +219,9 @@ export default class workview extends Component {
                 case 1:
                     this.props.workstopcase(this.state.configuration);
                     return;
+                case 2:
+                    this.state.callbackTozero();
+                    return;
                 default:
 
             }

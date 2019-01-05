@@ -120,7 +120,8 @@
       },
       "pause_configure": {
         "button1": "继续",
-        "button2": "关停"
+        "button2": "关停",
+        "button3": "清零"
       }
     },
     "configurationview":{

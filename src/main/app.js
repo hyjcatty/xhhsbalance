@@ -235,7 +235,7 @@ class App extends Component{
         this.refs.foot.show_configure_button(bmain);
         this.refs.foot.show_calibration_button(bmain);
         this.refs.foot.show_debug_button(bdebug);
-        this.refs.foot.show_export_button(bmain);
+        this.refs.foot.show_export_button(bdebug);
         this.refs.foot.show_language_button(blanguage);
     }
     footButtonShowAssistant(bsave,btozero,bdelete){

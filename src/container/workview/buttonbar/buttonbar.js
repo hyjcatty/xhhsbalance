@@ -53,7 +53,8 @@ export default class buttonbar extends Component {
                 },
                 "pause_configure":{
                     "button1":"RESUME",
-                    "button2":"STOP"
+                    "button2":"STOP",
+                    "button3":"ToZero"
                 }
             }
         }
@@ -105,8 +106,9 @@ export default class buttonbar extends Component {
     }
     pause_configure(){
         this.setState({button:[this.state.language.pause_configure.button1,
-            this.state.language.pause_configure.button2
-        ],status:0,buttonnumber:2},this.calculatesize);
+            this.state.language.pause_configure.button2,
+            this.state.language.pause_configure.button3
+        ],status:0,buttonnumber:3},this.calculatesize);
     }
     hide(){
         this.setState({hide:"none"});

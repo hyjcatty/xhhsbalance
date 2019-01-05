@@ -15,7 +15,7 @@
       },{
         "groupname": "group2",
         "list": [
-          {"paraname":"choice21","type":"choice","max":"","min":"","value":"123","items":["123","456","789","0"],"note":"choice info"},
+          {"paraname":"choice21","type":"choice","max":"","min":"","value":"2","items":["123","456","789","0"],"note":"choice info"},
           {"paraname":"para21","type":"float","max":"100","min":"0","value":"50","note":"Note info"},
           {"paraname":"para24","type":"int","max":"100","min":"0","value":"50","note":"Note info"},
           {"paraname":"para25","type":"int","max":"100","min":"0","value":"50","note":"Note info"}
@@ -34,7 +34,7 @@
       },{
         "groupname": "group4",
         "list": [
-          {"paraname":"choice41","type":"choice","max":"","min":"","value":"123","items":["123","456","789","0"],"note":"choice info"},
+          {"paraname":"choice41","type":"choice","max":"","min":"","value":"0","items":["123","456","789","0"],"note":"choice info"},
           {"paraname":"para41","type":"float","max":"100","min":"0","value":"50","note":"Note info"},
           {"paraname":"para44","type":"int","max":"100","min":"0","value":"50","note":"Note info"},
           {"paraname":"para45","type":"int","max":"100","min":"0","value":"50","note":"Note info"}
